@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build and Deploy
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -6,29 +6,19 @@ env:
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v4.1.7
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-    
-    - name: Install dependencies
-      run: npm install
-    
-    - name: Build
-      run: npm run build
     
     - name: Upload artifacts
       uses: actions/upload-artifact@v4.3.6
       with:
-        name: build-artifacts
-        path: dist/
+        name: static-files
+        path: |
+          *.html
+          *.css
+          *.js
