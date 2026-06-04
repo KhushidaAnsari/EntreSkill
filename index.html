@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EntreSkill Hub — Complete Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);min-height:100vh;padding:60px 48px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--accent-pale);color:var(--accent);border-radius:50px;padding:7px 18px;font-size:12px;font-weight:600;letter-spacing:0.5px;margin-bottom:28px;}
+.hero-badge span{width:7px;height:7px;border-radius:50%;background:var(--accent-light);display:inline-block;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+h1{font-family:var(--font-display);font-size:clamp(38px,6vw,58px);font-weight:800;letter-spacing:-2.5px;margin-bottom:10px;line-height:1;}
+h1 em{font-style:normal;color:var(--accent-light);}
+.subtitle{font-size:17px;color:var(--muted);font-weight:300;margin-bottom:20px;max-width:600px;line-height:1.65;}
+.quick-stats{display:flex;gap:24px;margin-bottom:56px;flex-wrap:wrap;}
+.qs-item{background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:8px 20px;display:flex;align-items:center;gap:8px;font-size:13px;}
+.qs-num{font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:-0.3px;}
+
+.section-header{display:flex;align-items:center;gap:12px;margin:40px 0 16px;}
+.section-header:first-of-type{margin-top:0;}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);}
+.section-line{flex:1;height:1px;background:var(--border);}
+
+.pages-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:8px;}
+.page-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;text-decoration:none;color:var(--ink);transition:all .2s;display:block;position:relative;}
+.page-card:hover{border-color:var(--accent-light);transform:translateY(-3px);box-shadow:0 8px 24px rgba(45,106,79,0.1);}
+.page-card.new::after{content:'NEW';position:absolute;top:14px;right:14px;background:var(--warm);color:white;font-size:9px;font-weight:700;padding:2px 7px;border-radius:50px;letter-spacing:0.5px;}
+.pc-icon{font-size:24px;margin-bottom:12px;display:block;}
+.pc-title{font-family:var(--font-display);font-size:15px;font-weight:800;letter-spacing:-0.4px;margin-bottom:5px;}
+.pc-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.pc-role{display:inline-block;font-size:10px;font-weight:600;padding:3px 9px;border-radius:50px;margin-top:10px;}
+.role-user{background:var(--accent-pale);color:var(--accent);}
+.role-mentor{background:var(--warm-pale);color:var(--warm);}
+.role-admin{background:#e8f4f8;color:#1a6a8a;}
+.role-public{background:#f3e6fb;color:#6a1a8a;}
+.role-tool{background:#faeeda;color:#854f0b;}
+
+.divider{border:none;border-top:1px solid var(--border);margin:40px 0;}
+
+.tech-section{margin-bottom:48px;}
+.tech-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.tech-pill{background:var(--card);border:1.5px solid var(--border);border-radius:50px;padding:7px 16px;font-size:13px;font-weight:500;}
+.tech-pill.highlight{background:var(--ink);color:white;border-color:var(--ink);}
+
+.launch-banner{background:var(--ink);border-radius:var(--radius);padding:32px 36px;margin-bottom:40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.lb-text h3{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-0.8px;color:white;margin-bottom:6px;}
+.lb-text p{font-size:14px;color:rgba(255,255,255,0.5);}
+.lb-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.lb-btn{background:var(--accent-light);color:var(--ink);border:none;border-radius:50px;padding:11px 24px;font-family:var(--font-body);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;}
+.lb-btn:hover{background:white;}
+.lb-btn.outline{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);}
+.lb-btn.outline:hover{background:rgba(255,255,255,0.2);}
+
+footer{border-top:1px solid var(--border);padding-top:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+footer .logo{font-family:var(--font-display);font-weight:800;font-size:16px;}
+footer p{font-size:13px;color:var(--muted);}
+footer .links{display:flex;gap:20px;}
+footer .links a{font-size:13px;color:var(--muted);text-decoration:none;}
+footer .links a:hover{color:var(--ink);}
+@media(max-width:600px){body{padding:32px 20px;}h1{font-size:34px;}.pages-grid{grid-template-columns:1fr;}.launch-banner{flex-direction:column;}.quick-stats{gap:10px;}}
+</style>
+</head>
+<body>
+  <div class="hero-badge"><span></span> Complete Full-Stack Web App — 19 Pages</div>
+  <h1>EntreSkill <em>Hub</em></h1>
+  <p class="subtitle">Skill-to-Startup Enablement Platform — a fully designed, multi-role HTML/CSS/JS web application with 19 pages, 3 user roles, interactive tools, and a shared design system.</p>
+
+  <div class="quick-stats">
+    <div class="qs-item"><span>📄</span><span class="qs-num">19</span>pages</div>
+    <div class="qs-item"><span>👥</span><span class="qs-num">3</span>user roles</div>
+    <div class="qs-item"><span>🧮</span><span class="qs-num">5</span>interactive tools</div>
+    <div class="qs-item"><span>📱</span>Fully responsive</div>
+    <div class="qs-item"><span>🎨</span>Shared design system</div>
+    <div class="qs-item"><span>⚡</span>Zero dependencies</div>
+  </div>
+
+  <div class="launch-banner">
+    <div class="lb-text">
+      <h3>Start exploring the project</h3>
+      <p>Open any page below — all pages link to each other. Start from the landing page or jump straight to the dashboard.</p>
+    </div>
+    <div class="lb-actions">
+      <a class="lb-btn" href="entreskill-hub.html">🌐 Landing page</a>
+      <a class="lb-btn outline" href="dashboard.html">🏠 Dashboard</a>
+    </div>
+  </div>
+
+  <!-- PUBLIC -->
+  <div class="section-header"><div class="section-label">Public pages</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="entreskill-hub.html"><span class="pc-icon">🌐</span><div class="pc-title">Landing page</div><div class="pc-desc">Hero with animated background, features, testimonials, stats, and 5-step onboarding modal with skill quiz and business idea results.</div><span class="pc-role role-public">Public</span></a>
+    <a class="page-card" href="become-mentor.html"><span class="pc-icon">🎓</span><div class="pc-title">Become a mentor</div><div class="pc-desc">Public marketing page for mentor recruitment with benefits, mentor testimonials, application process, and a full application form.</div><span class="pc-role role-public">Public</span></a>
+  </div>
+
+  <!-- ENTREPRENEUR -->
+  <div class="section-header"><div class="section-label">Entrepreneur — core pages</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="dashboard.html"><span class="pc-icon">🏠</span><div class="pc-title">Dashboard</div><div class="pc-desc">Personal overview with roadmap progress bars, activity feed, upcoming sessions, mentor cards, and saved business ideas.</div><span class="pc-role role-user">Entrepreneur</span></a>
+    <a class="page-card" href="business-ideas.html"><span class="pc-icon">💡</span><div class="pc-title">Business Ideas Explorer</div><div class="pc-desc">12 ideas with skill match %, filters, investment details, skill quiz modal, and full idea detail modal with roadmap CTA.</div><span class="pc-role role-user">Entrepreneur</span></a>
+    <a class="page-card" href="roadmap.html"><span class="pc-icon">🗺️</span><div class="pc-title">Business Roadmap</div><div class="pc-desc">4-phase interactive roadmap with step unlocking, milestone tracker, quick-tips sidebar, and multiple roadmap switcher.</div><span class="pc-role role-user">Entrepreneur</span></a>
+    <a class="page-card" href="learning.html"><span class="pc-icon">📚</span><div class="pc-title">Learning Library</div><div class="pc-desc">Videos, articles, checklists with search, type filters, 5-day streak card, bookmark system, and a video player modal.</div><span class="pc-role role-user">Entrepreneur</span></a>
+    <a class="page-card" href="mentor-directory.html"><span class="pc-icon">👥</span><div class="pc-title">Mentor Directory</div><div class="pc-desc">9 verified mentors with search, category filters, detailed cards, ratings, and a full session booking modal with time slots.</div><span class="pc-role role-user">Entrepreneur</span></a>
+    <a class="page-card" href="qa-forum.html"><span class="pc-icon">💬</span><div class="pc-title">Q&A Community</div><div class="pc-desc">Stack Overflow-style forum with voting, full thread view, top contributors sidebar, trending topics, and an ask question modal.</div><span class="pc-role role-user">Entrepreneur</span></a>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="section-header"><div class="section-label">Business tools</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="business-plan.html"><span class="pc-icon">📝</span><div class="pc-title">Business Plan Generator</div><div class="pc-desc">Fill in your details and generate a full plan: executive summary, market analysis, operations, marketing, financials, SWOT, and 6-month timeline.</div><span class="pc-role role-tool">Tool</span></a>
+    <a class="page-card" href="cost-calculator.html"><span class="pc-icon">🧮</span><div class="pc-title">Cost & Pricing Calculator</div><div class="pc-desc">3-tab live calculator: service pricing with margin, break-even analysis, and income goal planner — all update instantly as you type.</div><span class="pc-role role-tool">Tool</span></a>
+    <a class="page-card" href="legal-guide.html"><span class="pc-icon">⚖️</span><div class="pc-title">Legal & Compliance Guide</div><div class="pc-desc">8-topic legal guide: business structure, registration steps, GST basics, MSME/Udyam, banking, contracts, income tax, and labour law.</div><span class="pc-role role-tool">Tool</span></a>
+    <a class="page-card" href="scheme-finder.html"><span class="pc-icon">🏛️</span><div class="pc-title">Government Scheme Finder</div><div class="pc-desc">12 real government schemes (Mudra, Stand-Up India, PMKVY, etc.) with eligibility matching, filters, and apply links.</div><span class="pc-role role-tool">Tool</span></a>
+    <a class="page-card" href="progress-report.html"><span class="pc-icon">📊</span><div class="pc-title">Progress Report</div><div class="pc-desc">Visual analytics with activity bar charts, activity heatmap, milestone timeline, KPI comparison table, and personalised AI insights.</div><span class="pc-role role-tool">Tool</span></a>
+  </div>
+
+  <!-- ACCOUNT -->
+  <div class="section-header"><div class="section-label">Account pages</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="profile.html"><span class="pc-icon">👤</span><div class="pc-title">Profile & Settings</div><div class="pc-desc">5-tab settings: personal info, skills/interests picker, 12 achievement badges, notification toggles, and security/danger zone.</div><span class="pc-role role-user">Entrepreneur</span></a>
+    <a class="page-card" href="notifications.html"><span class="pc-icon">🔔</span><div class="pc-title">Notifications</div><div class="pc-desc">Tabbed notification center with 7 unread items, mark all read, session/roadmap/community categories, and action buttons per alert.</div><span class="pc-role role-user">Entrepreneur</span></a>
+  </div>
+
+  <!-- MENTOR -->
+  <div class="section-header"><div class="section-label">Mentor role</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="mentor-dashboard.html"><span class="pc-icon">🎓</span><div class="pc-title">Mentor Dashboard</div><div class="pc-desc">4-tab dashboard: today's sessions, new mentee requests, resource upload form, mentee progress grid, and reviews with ratings.</div><span class="pc-role role-mentor">Mentor</span></a>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="section-header"><div class="section-label">Admin role</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="admin.html"><span class="pc-icon">🛡️</span><div class="pc-title">Admin Panel</div><div class="pc-desc">6-tab admin control centre: overview with KPIs, user management table, mentor verification, content approval queue, feedback handling, and analytics charts.</div><span class="pc-role role-admin">Admin</span></a>
+  </div>
+
+  <!-- UTILITY -->
+  <div class="section-header"><div class="section-label">Utility</div><div class="section-line"></div></div>
+  <div class="pages-grid">
+    <a class="page-card" href="404.html"><span class="pc-icon">🔍</span><div class="pc-title">404 Error page</div><div class="pc-desc">Friendly not-found page with quick navigation links to all major sections.</div><span class="pc-role role-public">All</span></a>
+  </div>
+
+  <hr class="divider">
+
+  <div class="tech-section">
+    <div class="section-label" style="margin-bottom:0;">Tech stack & features</div>
+    <div class="tech-row">
+      <div class="tech-pill highlight">19 HTML pages</div>
+      <div class="tech-pill highlight">3 user roles</div>
+      <div class="tech-pill">HTML5</div>
+      <div class="tech-pill">CSS3 custom properties</div>
+      <div class="tech-pill">Vanilla JavaScript</div>
+      <div class="tech-pill">Google Fonts (Syne + DM Sans)</div>
+      <div class="tech-pill">CSS Grid & Flexbox</div>
+      <div class="tech-pill">Responsive design</div>
+      <div class="tech-pill">CSS animations</div>
+      <div class="tech-pill">Modal dialogs</div>
+      <div class="tech-pill">Interactive calculators</div>
+      <div class="tech-pill">Live data filtering</div>
+      <div class="tech-pill">SVG charts</div>
+      <div class="tech-pill">Activity heatmap</div>
+      <div class="tech-pill">Zero dependencies</div>
+      <div class="tech-pill">No frameworks</div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="logo">EntreSkill Hub</div>
+    <div class="links">
+      <a href="entreskill-hub.html">Landing</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="admin.html">Admin</a>
+      <a href="become-mentor.html">Become a mentor</a>
+    </div>
+    <p>Skill-to-Startup Platform · 2026 · 19 pages complete</p>
+  </footer>
+</body>
+</html>
