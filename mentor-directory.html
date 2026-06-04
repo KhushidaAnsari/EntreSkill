@@ -97,27 +97,29 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <div class="sidebar-logo"><a href="index.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
     <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
     <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
     <a class="nav-item active" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
-    <div class="nav-section">Account</div>
-    <a class="nav-item" href="business-ideas.html"><span class="nav-icon">💡</span><span>Business Ideas</span></a>
+    <a class="nav-item" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
+    <a class="nav-item" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
     <div class="nav-section">Account</div>
     <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
-    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin Panel</span></a>
+    <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress</span></a>
+    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin</span></a>
     <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
   </nav>
-  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">PR</div><div><div class="user-name">Priya Ramesh</div><div class="user-role">Entrepreneur</div></div></div></div>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="userAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
 </aside>
 
 <main class="main">
   <div class="topbar">
     <div class="topbar-title">Mentor Directory</div>
     <div class="topbar-right">
+      <a href="become-mentor.html" style="background:var(--card);color:var(--accent);border:1.5px solid var(--accent);border-radius:50px;padding:9px 18px;font-family:var(--font-body);font-size:13px;font-weight:500;text-decoration:none;">Become a mentor</a>
       <button style="background:var(--accent);color:white;border:none;border-radius:50px;padding:9px 20px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;" onclick="openModal(null)">+ Book a session</button>
     </div>
   </div>
@@ -278,6 +280,10 @@ function confirmBooking(){
   const name=selectedMentor?selectedMentor.name:'your mentor';
   alert(`✅ Session booked with ${name}!\n\nYou'll receive a confirmation email with the video call link. See you soon! 🎉`);
 }
+
+const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+document.getElementById('sidebarUserName').textContent = savedName;
+document.getElementById('userAvatar').textContent = getUserInitials(savedName);
 
 renderMentors(mentors);
 </script>
