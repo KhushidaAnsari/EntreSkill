@@ -29,3 +29,6 @@ jobs:
       with:
         name: build-artifacts
         path: dist/
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
