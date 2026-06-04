@@ -1,5 +1,8 @@
 name: Build and Test
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: [ main ]
@@ -29,6 +32,3 @@ jobs:
       with:
         name: build-artifacts
         path: dist/
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
