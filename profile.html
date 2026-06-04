@@ -21,7 +21,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 .nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
 .sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
 .user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
-.user-avatar-sm{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-avatar-sm{width:32px;height:32px;border-radius:50%;background:#e76f51;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
 .user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
 .user-role-txt{font-size:11px;color:rgba(255,255,255,0.35);}
 .main{margin-left:var(--sidebar);flex:1;}
@@ -96,32 +96,29 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <div class="sidebar-logo"><a href="index.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
-    <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
-    <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
-    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
-    <a class="nav-item" href="business-ideas.html"><span class="nav-icon">💡</span><span>Business Ideas</span></a>
     <div class="nav-section">Account</div>
     <a class="nav-item active" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
-    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin Panel</span></a>
+    <a class="nav-item" href="mentor-dashboard.html"><span class="nav-icon">🏠</span><span>Mentor Dashboard</span></a>
     <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+
   </nav>
-  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar-sm">PR</div><div><div class="user-name">Priya Ramesh</div><div class="user-role-txt">Entrepreneur</div></div></div></div>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar-sm" id="sidebarAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role-txt">Entrepreneur</div></div></div></div>
 </aside>
 <main class="main">
   <div class="topbar">
     <div class="topbar-title">Profile & Settings</div>
-    <button class="btn-save-profile" onclick="alert('Profile saved successfully! ✓')">Save changes</button>
+    <button class="btn-save-profile" onclick="saveProfileChanges()">Save changes</button>
   </div>
   <div class="content">
     <div class="profile-hero">
-      <div class="user-avatar-big" onclick="alert('Photo upload coming soon!')">PR<div class="avatar-edit">✏️</div></div>
+      <div class="user-avatar-big" id="profileAvatar" onclick="alert('Photo upload coming soon!')">PR<div class="avatar-edit">✏️</div></div>
       <div>
-        <div class="profile-name">Priya Ramesh</div>
-        <div class="profile-sub">Chennai, Tamil Nadu · Joined January 2026</div>
+        <div class="profile-name" id="profileName">Entrepreneur</div>
+        <div class="profile-sub" id="profileSub">Chennai, Tamil Nadu · Joined January 2026</div>
         <div class="profile-badges">
           <span class="p-badge pb-green">✓ Verified user</span>
           <span class="p-badge pb-warm">🔥 5-day streak</span>
@@ -149,9 +146,9 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
       <div class="form-section">
         <div class="form-section-title">Basic information</div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Full name</label><input class="form-input" type="text" value="Priya Ramesh"></div>
-          <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" type="tel" value="+91 98765 43210"></div>
-          <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" value="priya@example.com"></div>
+          <div class="form-group"><label class="form-label">Full name</label><input class="form-input" id="profileFullName" type="text" value="Entrepreneur"></div>
+          <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" id="profilePhone" type="tel" ></div>
+          <div class="form-group"><label class="form-label">Email address</label><input class="form-input" id="profileEmail" type="email" value="priya@example.com"></div>
           <div class="form-group"><label class="form-label">Date of birth</label><input class="form-input" type="date" value="1992-04-15"></div>
         </div>
         <div class="form-group"><label class="form-label">Bio</label><textarea class="form-textarea">I'm a tailor based in Chennai with 12 years of experience. Currently building my own tailoring studio — I specialise in custom women's wear and bridal alterations.</textarea></div>
@@ -159,9 +156,9 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
       <div class="form-section">
         <div class="form-section-title">Location & business context</div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">City / town</label><input class="form-input" type="text" value="Chennai"></div>
-          <div class="form-group"><label class="form-label">State</label><select class="form-select"><option selected>Tamil Nadu</option><option>Maharashtra</option><option>Karnataka</option><option>Kerala</option><option>Telangana</option><option>Gujarat</option><option>West Bengal</option><option>Delhi</option><option>Uttar Pradesh</option><option>Rajasthan</option></select></div>
-          <div class="form-group"><label class="form-label">Current situation</label><select class="form-select"><option selected>I'm employed and want a side business</option><option>I'm unemployed and want to start something</option><option>I'm a homemaker looking for income</option><option>I already have a small business</option></select></div>
+          <div class="form-group"><label class="form-label">City / town</label><input class="form-input" id="profileCity" type="text" value="Chennai"></div>
+          <div class="form-group"><label class="form-label">State</label><select class="form-select" id="profileState"><option selected>Tamil Nadu</option><option>Maharashtra</option><option>Karnataka</option><option>Kerala</option><option>Telangana</option><option>Gujarat</option><option>West Bengal</option><option>Delhi</option><option>Uttar Pradesh</option><option>Rajasthan</option></select></div>
+          <div class="form-group"><label class="form-label">Current situation</label><select class="form-select" id="profileSituation"><option selected>I'm employed and want a side business</option><option>I'm currently employed and want a side business</option><option>I'm unemployed and want to start something</option><option>I'm a homemaker looking for income</option><option>I'm a student exploring entrepreneurship</option><option>I already have a small business</option><option>I already have a small business and want to grow</option></select></div>
           <div class="form-group"><label class="form-label">Business stage</label><select class="form-select"><option>Just exploring ideas</option><option selected>Planning / getting started</option><option>In operation (less than 1 year)</option><option>Established (1+ years)</option></select></div>
         </div>
       </div>
@@ -181,7 +178,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
       <div class="form-section">
         <div class="form-section-title">Experience level</div>
         <div class="form-grid">
-          <div class="form-group"><label class="form-label">Years in your primary skill</label><input class="form-input" type="number" value="12" min="0" max="40"></div>
+          <div class="form-group"><label class="form-label">Years in your primary skill</label><input class="form-input" id="profileExperience" type="number" value="12" min="0" max="40"></div>
           <div class="form-group"><label class="form-label">Previous business experience</label><select class="form-select"><option>None</option><option selected>Some (helped in a family business)</option><option>Yes (ran a small venture)</option></select></div>
         </div>
       </div>
@@ -251,7 +248,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
         <div class="dz-sub">These actions are permanent and cannot be undone.</div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;">
           <button class="btn-danger" onclick="if(confirm('Are you sure you want to delete all your data? This cannot be undone.'))alert('Account data cleared.')">Clear all data</button>
-          <button class="btn-danger" onclick="if(confirm('Are you sure you want to permanently delete your account?'))window.location='entreskill-hub.html'">Delete account</button>
+          <button class="btn-danger" onclick="if(confirm('Are you sure you want to permanently delete your account?'))window.location='frontpage.html'">Delete account</button>
         </div>
       </div>
     </div>
@@ -267,12 +264,108 @@ const myInterests=new Set(['Extra income','Work from home']);
 document.getElementById('skillChips').innerHTML=skills.map(s=>`<div class="sel-chip ${mySkills.has(s)?'on':''}" onclick="this.classList.toggle('on')">${s}</div>`).join('');
 document.getElementById('interestChips').innerHTML=interests.map(i=>`<div class="sel-chip ${myInterests.has(i)?'on':''}" onclick="this.classList.toggle('on')">${i}</div>`).join('');
 
+function getSavedProfile() {
+  try {
+    return JSON.parse(localStorage.getItem('entreSkillProfile')) || {};
+  } catch {
+    return {};
+  }
+}
+
+function getInitials(name) {
+  return (name || 'Entrepreneur')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0].toUpperCase())
+    .join('') || 'EN';
+}
+
+function splitLocation(location) {
+  const parts = (location || '').split(',').map(part => part.trim()).filter(Boolean);
+  return {
+    city: parts[0] || '',
+    state: parts.slice(1).join(', ') || ''
+  };
+}
+
+function setSelectValue(selectId, value) {
+  if (!value) return;
+  const select = document.getElementById(selectId);
+  if (!select) return;
+  const hasOption = Array.from(select.options).some(option => option.value === value || option.textContent === value);
+  if (!hasOption) select.add(new Option(value, value));
+  select.value = value;
+}
+
+function applySavedProfile() {
+  const profile = getSavedProfile();
+  const name = profile.name || localStorage.getItem('entreSkillName') || 'Entrepreneur';
+  const initials = getInitials(name);
+  const location = splitLocation(profile.location);
+
+  document.getElementById('profileName').textContent = name;
+  document.getElementById('sidebarUserName').textContent = name;
+  document.getElementById('sidebarAvatar').textContent = initials;
+  document.getElementById('profileAvatar').innerHTML = `${initials}<div class="avatar-edit">✏️</div>`;
+
+  document.getElementById('profileFullName').value = name;
+  if (profile.email) document.getElementById('profileEmail').value = profile.email;
+  if (profile.phone) document.getElementById('profilePhone').value = profile.phone;
+  if (location.city) document.getElementById('profileCity').value = location.city;
+  if (location.state) setSelectValue('profileState', location.state);
+  if (profile.situation) setSelectValue('profileSituation', profile.situation);
+  if (profile.experience) document.getElementById('profileExperience').value = profile.experience;
+
+  const shownLocation = [location.city || document.getElementById('profileCity').value, location.state || document.getElementById('profileState').value]
+    .filter(Boolean)
+    .join(', ');
+  if (shownLocation) document.getElementById('profileSub').textContent = `${shownLocation} · Joined January 2026`;
+
+  if (Array.isArray(profile.skills) && profile.skills.length) {
+    document.querySelectorAll('#skillChips .sel-chip').forEach(chip => {
+      chip.classList.toggle('on', profile.skills.includes(chip.textContent.trim()));
+    });
+  }
+
+  if (profile.goal) {
+    const savedGoal = profile.goal.replace(/^[^\w]+/, '').trim();
+    document.querySelectorAll('#interestChips .sel-chip').forEach(chip => {
+      chip.classList.toggle('on', savedGoal.includes(chip.textContent.trim()));
+    });
+  }
+}
+
+function saveProfileChanges() {
+  const city = document.getElementById('profileCity').value.trim();
+  const state = document.getElementById('profileState').value;
+  const profile = {
+    ...getSavedProfile(),
+    name: document.getElementById('profileFullName').value.trim() || 'Entrepreneur',
+    email: document.getElementById('profileEmail').value.trim(),
+    phone: document.getElementById('profilePhone').value.trim(),
+    location: [city, state].filter(Boolean).join(', '),
+    situation: document.getElementById('profileSituation').value,
+    experience: document.getElementById('profileExperience').value,
+    skills: Array.from(document.querySelectorAll('#skillChips .sel-chip.on')).map(chip => chip.textContent.trim()),
+    interests: Array.from(document.querySelectorAll('#interestChips .sel-chip.on')).map(chip => chip.textContent.trim())
+  };
+
+  localStorage.setItem('entreSkillProfile', JSON.stringify(profile));
+  localStorage.setItem('entreSkillName', profile.name);
+  applySavedProfile();
+  alert('Profile saved successfully! ✓');
+}
+
 function switchTab(name,btn){
   document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
 }
+
+applySavedProfile();
 </script>
 </body>
 </html>

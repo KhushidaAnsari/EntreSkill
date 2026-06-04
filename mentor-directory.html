@@ -103,7 +103,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
     <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
     <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
-    <a class="nav-item active" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
+    <a class="nav-item active" href="Mentor.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
     <a class="nav-item" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
     <a class="nav-item" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
     <div class="nav-section">Account</div>
@@ -279,6 +279,16 @@ function confirmBooking(){
   closeModal();
   const name=selectedMentor?selectedMentor.name:'your mentor';
   alert(`✅ Session booked with ${name}!\n\nYou'll receive a confirmation email with the video call link. See you soon! 🎉`);
+}
+
+function getUserInitials(name) {
+  return (name || 'Entrepreneur')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0].toUpperCase())
+    .join('') || 'EN';
 }
 
 const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';

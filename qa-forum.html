@@ -119,22 +119,22 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <div class="sidebar-logo"><a href="index.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
     <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
     <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
-    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
-    <a class="nav-item" href="business-ideas.html"><span class="nav-icon">💡</span><span>Business Ideas</span></a>
-    <a class="nav-item active" href="qa-forum.html"><span class="nav-icon">💬</span><span>Q&A Community</span></a>
+    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>  
+    <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress Report</span></a>
     <div class="nav-section">Account</div>
     <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
-    <a class="nav-item" href="notifications.html"><span class="nav-icon">🔔</span><span>Notifications</span></a>
-    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin Panel</span></a>
+    <a class="nav-item" href="Admin.html"><span class="nav-icon">🛡️</span><span>Admin Panel</span></a>
+    <a class="nav-item active" href="Qa-forum.html"><span class="nav-icon">💬</span><span>Q&A Community</span></a>
+    <a class="nav-item" href="notification.html"><span class="nav-icon">🔔</span><span>Notifications</span></a>
     <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
   </nav>
-  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">PR</div><div><div class="user-name">Priya Ramesh</div><div class="user-role">Entrepreneur</div></div></div></div>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="userAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
 </aside>
 <main class="main">
   <div class="topbar">
@@ -355,6 +355,23 @@ function submitQuestion(){
   alert('Question posted! ✓\n\nYour question is now live. Mentors and community members typically respond within 4 hours.');
 }
 
+function getUserInitials(name) {
+  return (name || 'Entrepreneur')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0].toUpperCase())
+    .join('') || 'EN';
+}
+
+function applyCurrentUser() {
+  const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+  document.getElementById('sidebarUserName').textContent = savedName;
+  document.getElementById('userAvatar').textContent = getUserInitials(savedName);
+}
+
+applyCurrentUser();
 renderQuestions(questions);
 </script>
 </body>

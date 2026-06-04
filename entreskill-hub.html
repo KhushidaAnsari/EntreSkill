@@ -941,13 +941,21 @@
   }
 
   function goToDashboard() {
+    const userProfile = {
+      name: document.getElementById('inp-name').value.trim() || 'Entrepreneur',
+      email: document.getElementById('inp-email').value.trim(),
+      phone: document.getElementById('inp-phone').value.trim(),
+      location: document.getElementById('inp-location').value.trim(),
+      situation: document.getElementById('inp-situation').value,
+      experience: document.getElementById('inp-experience').value,
+      skills: Array.from(document.querySelectorAll('#skills-grid .chip.selected')).map(chip => chip.textContent.trim()),
+      goal: document.querySelector('#interests-grid .interest-card.selected .ic-title')?.textContent.trim() || ''
+    };
+
+    localStorage.setItem('entreSkillProfile', JSON.stringify(userProfile));
+    localStorage.setItem('entreSkillName', userProfile.name);
     closeModal();
-    const name = (document.getElementById('inp-name')?.value || 'Entrepreneur').trim();
-    alert(
-      'Welcome to your dashboard, ' +
-        (name || 'Entrepreneur') +
-        '! In the full app, this would take you to your personalised dashboard.'
-    );
+    window.location.href = 'dashboard.html';
   }
 
   function toggleMobileMenu() {

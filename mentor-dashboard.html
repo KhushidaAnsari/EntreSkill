@@ -135,18 +135,16 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <div class="sidebar-logo"><a href="index.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
   <nav class="sidebar-nav">
-    <div class="nav-section">Mentor</div>
-    <a class="nav-item active" href="mentor-dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
-    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>All mentors</span></a>
-    <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Resources</span></a>
-    <div class="nav-section">Switch view</div>
-    <a class="nav-item" href="dashboard.html"><span class="nav-icon">👤</span><span>User dashboard</span></a>
-    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin Panel</span></a>
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item active" href="mentor-dashboard.html"><span class="nav-icon">🏠</span><span>Mentor Dashboard</span></a>
     <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
   </nav>
-  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">MI</div><div><div class="user-name">Meera Iyer</div><div class="user-role">Mentor</div></div></div></div>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="userAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
 </aside>
 <main class="main">
   <div class="topbar">
@@ -158,7 +156,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
   </div>
   <div class="content">
     <div class="greeting">
-      <h1>Welcome back, Meera 👋</h1>
+      <h1 id="dashboardGreeting">Welcome back, Mentor 👋</h1>
       <p>You have 2 sessions today and 3 new mentee requests waiting.</p>
     </div>
 
@@ -327,8 +325,79 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 
     <!-- MENTEES -->
     <div class="tab-pane" id="tab-mentees">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;" id="mentees-grid">
-        <!-- Mentees are injected via script to avoid CSS parser errors from template literals in some editors -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#2d6a4f;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">PR</div>
+            <div><div style="font-size:15px;font-weight:600;">Priya Ramesh</div><div style="font-size:12px;color:var(--muted);">Tailoring - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">64%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:64%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Priya Ramesh...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Priya Ramesh...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#e76f51;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">AK</div>
+            <div><div style="font-size:15px;font-weight:600;">Arjun Kulkarni</div><div style="font-size:12px;color:var(--muted);">Food delivery - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">38%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:38%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Arjun Kulkarni...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Arjun Kulkarni...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#264653;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">SM</div>
+            <div><div style="font-size:15px;font-weight:600;">Suresh M.</div><div style="font-size:12px;color:var(--muted);">Phone repair - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">22%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:22%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Suresh M...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Suresh M...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#8e44ad;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">DN</div>
+            <div><div style="font-size:15px;font-weight:600;">Deepa Nair</div><div style="font-size:12px;color:var(--muted);">Handicrafts - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">81%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:81%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Deepa Nair...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Deepa Nair...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#1d7a8c;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">VP</div>
+            <div><div style="font-size:15px;font-weight:600;">Vikram Patel</div><div style="font-size:12px;color:var(--muted);">Electronics repair - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">55%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:55%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Vikram Patel...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Vikram Patel...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#6a4c93;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">RS</div>
+            <div><div style="font-size:15px;font-weight:600;">Rekha Sharma</div><div style="font-size:12px;color:var(--muted);">Tailoring - New</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">5%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:5%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Rekha Sharma...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Rekha Sharma...')">Session</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -362,6 +431,22 @@ function switchTab(name,btn){
   document.getElementById('tab-'+name).classList.add('active');
   if(btn) btn.classList.add('active');
 }
+const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+const firstName = savedName.trim().split(' ')[0] || 'Entrepreneur';
+const initials = savedName
+  .trim()
+  .split(' ')
+  .filter(Boolean)
+  .slice(0, 2)
+  .map(part => part[0].toUpperCase())
+  .join('') || 'EN';
+
+const dashboardUserName = document.getElementById('dashboardUserName');
+if (dashboardUserName) dashboardUserName.textContent = firstName;
+const dashboardGreeting = document.getElementById('dashboardGreeting');
+if (dashboardGreeting) dashboardGreeting.textContent = `Welcome back, ${firstName} 👋`;
+document.getElementById('sidebarUserName').textContent = savedName;
+document.getElementById('userAvatar').textContent = initials;
 </script>
 </body>
 </html>

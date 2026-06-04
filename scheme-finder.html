@@ -79,24 +79,22 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
 </head>
 <body>
 <aside class="sidebar">
-  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <div class="sidebar-logo"><a href="index.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
   <nav class="sidebar-nav">
     <div class="nav-section">Main</div>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
     <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
     <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
+    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
     <a class="nav-item" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
     <a class="nav-item active" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
-    <a class="nav-item" href="business-plan.html"><span class="nav-icon">📝</span><span>Business Plan</span></a>
-    <a class="nav-item" href="cost-calculator.html"><span class="nav-icon">🧮</span><span>Calculator</span></a>
-    <a class="nav-item" href="qa-forum.html"><span class="nav-icon">💬</span><span>Community</span></a>
     <div class="nav-section">Account</div>
     <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
     <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress</span></a>
     <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin</span></a>
     <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
   </nav>
-  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">PR</div><div><div class="user-name">Priya Ramesh</div><div class="user-role">Entrepreneur</div></div></div></div>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="sidebarAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
 </aside>
 <main class="main">
   <div class="topbar">
@@ -198,7 +196,23 @@ function findSchemes(){
   const gender=document.getElementById('q_gender').value;
   alert(`Finding schemes for:\n• Business: ${type}\n• Gender: ${gender}\n\nIn the full app, this would re-rank and filter all schemes based on your answers, showing only those you're eligible for.`);
 }
+function getUserInitials(name) {
+  return (name || 'Entrepreneur')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0].toUpperCase())
+    .join('') || 'EN';
+}
 
+function applyCurrentUser() {
+  const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+  document.getElementById('sidebarUserName').textContent = savedName;
+  document.getElementById('sidebarAvatar').textContent = getUserInitials(savedName);
+}
+
+applyCurrentUser();
 render();
 </script>
 </body>
