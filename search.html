@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search — EntreSkill Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--sidebar:220px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;--radius-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar);background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo a{font-family:var(--font-display);font-weight:800;font-size:17px;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#52b788;}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.5);font-size:14px;text-decoration:none;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(82,183,136,0.18);color:#52b788;}
+.nav-icon{font-size:17px;width:20px;text-align:center;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
+.user-role{font-size:11px;color:rgba(255,255,255,0.35);}
+.main{margin-left:var(--sidebar);flex:1;}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:0 36px;height:64px;display:flex;align-items:center;gap:16px;}
+.back-btn{font-size:18px;cursor:pointer;color:var(--muted);padding:8px;border-radius:8px;border:none;background:transparent;transition:all .15s;}
+.back-btn:hover{background:var(--paper);color:var(--ink);}
+/* BIG SEARCH BAR */
+.search-hero{padding:0 36px;background:var(--cream);border-bottom:1px solid var(--border);padding-bottom:20px;}
+.search-big-wrap{display:flex;align-items:center;gap:14px;background:var(--card);border:2px solid var(--border);border-radius:50px;padding:14px 22px;transition:border-color .2s;max-width:720px;}
+.search-big-wrap:focus-within{border-color:var(--accent);}
+.search-big-icon{font-size:22px;color:var(--muted);}
+.search-big-input{flex:1;border:none;background:transparent;font-family:var(--font-body);font-size:18px;color:var(--ink);outline:none;}
+.search-big-input::placeholder{color:var(--muted);}
+.search-clear{font-size:18px;cursor:pointer;color:var(--muted);border:none;background:transparent;padding:4px;}
+.search-big-wrap .search-clear{display:none;}
+.search-big-wrap.has-value .search-clear{display:block;}
+.search-tabs{display:flex;gap:8px;padding-top:14px;flex-wrap:wrap;}
+.s-tab{padding:8px 18px;border-radius:50px;border:1.5px solid var(--border);background:var(--card);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.s-tab:hover{border-color:var(--accent);}
+.s-tab.active{background:var(--ink);color:white;border-color:var(--ink);}
+.s-tab-count{background:rgba(255,255,255,0.2);padding:1px 6px;border-radius:50px;font-size:11px;}
+.s-tab:not(.active) .s-tab-count{background:var(--paper);color:var(--muted);}
+/* CONTENT */
+.content{padding:28px 36px;max-width:900px;}
+/* SUGGESTIONS */
+.suggestions-section{margin-bottom:32px;}
+.ss-title{font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.suggestions-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.suggestion-chip{padding:9px 16px;background:var(--card);border:1.5px solid var(--border);border-radius:50px;font-size:13px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.suggestion-chip:hover{border-color:var(--accent-light);background:var(--accent-pale);}
+.recent-chip{background:var(--paper);}
+/* RESULTS */
+.results-meta{font-size:13px;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+.result-item{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:12px;cursor:pointer;transition:all .2s;display:flex;gap:16px;align-items:flex-start;}
+.result-item:hover{border-color:var(--accent-light);transform:translateX(4px);}
+.ri-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ri-green{background:var(--accent-pale);}
+.ri-warm{background:var(--warm-pale);}
+.ri-blue{background:#e6f1fb;}
+.ri-purple{background:#f3e6fb);}
+.ri-yellow{background:#faeeda;}
+.ri-gray{background:var(--paper);}
+.ri-body{flex:1;}
+.ri-cat{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.ri-title{font-size:15px;font-weight:600;margin-bottom:5px;line-height:1.4;}
+.ri-title mark{background:rgba(82,183,136,0.25);border-radius:3px;padding:0 2px;color:inherit;}
+.ri-excerpt{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px;}
+.ri-meta{display:flex;gap:12px;font-size:12px;color:var(--muted);}
+.ri-arrow{color:var(--muted);font-size:18px;align-self:center;flex-shrink:0;}
+/* NO RESULTS */
+.no-results{text-align:center;padding:56px 24px;}
+.nr-icon{font-size:48px;margin-bottom:16px;}
+.nr-title{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;}
+.nr-sub{font-size:14px;color:var(--muted);max-width:360px;margin:0 auto 24px;line-height:1.6;}
+/* TRENDING */
+.trending-section{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:24px;}
+.trending-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--paper);cursor:pointer;transition:all .15s;}
+.trending-item:last-child{border-bottom:none;}
+.trending-item:hover .ti-title{color:var(--accent);}
+.ti-rank{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--border);width:24px;text-align:center;}
+.ti-icon{font-size:18px;}
+.ti-title{font-size:14px;font-weight:500;flex:1;}
+.ti-count{font-size:12px;color:var(--muted);}
+@media(max-width:900px){.sidebar{width:60px;}.sidebar-logo a span:not(.logo-dot){display:none;}.nav-item span:not(.nav-icon){display:none;}.nav-section,.user-name,.user-role{display:none;}.main{margin-left:60px;}}
+@media(max-width:600px){.content{padding:20px;}.search-hero{padding:0 20px 16px;}.topbar{padding:0 20px;}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+    <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
+    <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
+    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
+    <a class="nav-item" href="business-ideas.html"><span class="nav-icon">💡</span><span>Business Ideas</span></a>
+    <a class="nav-item" href="messages.html"><span class="nav-icon">✉️</span><span>Messages</span></a>
+    <a class="nav-item" href="qa-forum.html"><span class="nav-icon">💬</span><span>Community</span></a>
+    <div class="nav-section">Tools</div>
+    <a class="nav-item" href="business-plan.html"><span class="nav-icon">📝</span><span>Business Plan</span></a>
+    <a class="nav-item" href="cost-calculator.html"><span class="nav-icon">🧮</span><span>Calculator</span></a>
+    <a class="nav-item" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
+    <a class="nav-item" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item" href="notifications.html"><span class="nav-icon">🔔</span><span>Notifications</span></a>
+    <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress</span></a>
+    <a class="nav-item active" href="search.html"><span class="nav-icon">🔍</span><span>Search</span></a>
+    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin</span></a>
+    <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+  </nav>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">PR</div><div><div class="user-name">Priya Ramesh</div><div class="user-role">Entrepreneur</div></div></div></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <button class="back-btn" onclick="history.back()">←</button>
+    <div style="font-family:var(--font-display);font-size:18px;font-weight:800;letter-spacing:-0.5px;">Search</div>
+    <div style="font-size:13px;color:var(--muted);margin-left:auto;">Press <kbd style="background:var(--paper);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:11px;">Ctrl K</kbd> anywhere</div>
+  </div>
+
+  <div class="search-hero">
+    <div class="search-big-wrap" id="searchWrap">
+      <span class="search-big-icon">🔍</span>
+      <input class="search-big-input" id="mainSearch" placeholder="Search for anything — ideas, guides, mentors, resources…" autofocus oninput="handleSearch(this.value)" autocomplete="off">
+      <button class="search-clear" onclick="clearSearch()">✕</button>
+    </div>
+    <div class="search-tabs" id="searchTabs"></div>
+  </div>
+
+  <div class="content" id="mainContent"></div>
+</main>
+
+<script>
+const allItems = [
+  // Business Ideas
+  {type:'idea',icon:'✂️',iconCls:'ri-green',cat:'Business Idea',title:'Custom tailoring studio',excerpt:'Start a home-based tailoring service. 95% skill match for you based on your profile.',meta:['14 steps','3 mentors','Easy difficulty'],url:'roadmap.html'},
+  {type:'idea',icon:'🍱',iconCls:'ri-warm',cat:'Business Idea',title:'Home tiffin service',excerpt:'Cook and deliver home-style meals to offices and families. Start small with 10–15 clients.',meta:['12 steps','2 mentors','Easy difficulty'],url:'roadmap.html'},
+  {type:'idea',icon:'📱',iconCls:'ri-blue',cat:'Business Idea',title:'Mobile & gadget repair',excerpt:'Offer doorstep or shop-based repair services for phones, tablets, and laptops.',meta:['11 steps','2 mentors','Easy difficulty'],url:'roadmap.html'},
+  {type:'idea',icon:'💇',iconCls:'ri-purple',cat:'Business Idea',title:'Home beauty salon',excerpt:'Offer hair, skin, and beauty services from home or on-call.',meta:['10 steps','3 mentors'],url:'roadmap.html'},
+  {type:'idea',icon:'📊',iconCls:'ri-green',cat:'Business Idea',title:'Social media management',excerpt:'Manage Instagram and Facebook accounts for local businesses.',meta:['12 steps','2 mentors'],url:'roadmap.html'},
+  // Mentors
+  {type:'mentor',icon:'👤',iconCls:'ri-green',cat:'Mentor',title:'Meera Iyer',excerpt:'Fashion & Tailoring expert with 12 years experience. 340 sessions, 4.9★ rating.',meta:['Fashion','Pricing','Instagram'],url:'mentor-directory.html'},
+  {type:'mentor',icon:'👤',iconCls:'ri-warm',cat:'Mentor',title:'Raj Kumar',excerpt:'Digital marketing specialist. Expert in Instagram, WhatsApp, and local SEO.',meta:['Marketing','Social media','SEO'],url:'mentor-directory.html'},
+  {type:'mentor',icon:'👤',iconCls:'ri-blue',cat:'Mentor',title:'Anita Singh',excerpt:'Legal & compliance expert. 412 sessions helping entrepreneurs with GST and MSME.',meta:['Legal','GST','MSME'],url:'mentor-directory.html'},
+  {type:'mentor',icon:'👤',iconCls:'ri-gray',cat:'Mentor',title:'Sunita Rao',excerpt:'Food business expert. FSSAI licensing, delivery, pricing for home kitchens.',meta:['Food','FSSAI','Delivery'],url:'mentor-directory.html'},
+  // Learning resources
+  {type:'resource',icon:'📹',iconCls:'ri-warm',cat:'Video',title:'MSME Registration Step-by-Step',excerpt:'Complete walkthrough of Udyam registration portal with screen recording.',meta:['34 min','Anita Singh','Legal'],url:'learning.html'},
+  {type:'resource',icon:'📄',iconCls:'ri-blue',cat:'Article',title:'GST basics for micro-entrepreneurs',excerpt:'Plain-language guide to GST: when to register, what to file, rates by business type.',meta:['12 min read','Anita Singh'],url:'learning.html'},
+  {type:'resource',icon:'☑️',iconCls:'ri-green',cat:'Checklist',title:'Business launch checklist',excerpt:'Everything you need to do before launching your micro-business — 32 action items.',meta:['5 min','Meera Iyer'],url:'learning.html'},
+  {type:'resource',icon:'📹',iconCls:'ri-warm',cat:'Video',title:'How to price tailoring services',excerpt:'Framework for calculating material + labour + overhead costs and setting profitable prices.',meta:['22 min','Meera Iyer','Finance'],url:'learning.html'},
+  {type:'resource',icon:'📄',iconCls:'ri-purple',cat:'Article',title:'Instagram marketing for small businesses',excerpt:'Step-by-step guide to growing a local service business on Instagram.',meta:['9 min read','Raj Kumar'],url:'learning.html'},
+  // Q&A
+  {type:'qa',icon:'💬',iconCls:'ri-blue',cat:'Community Q&A',title:'Do I need GST if my tailoring income is under ₹20L?',excerpt:'Answered by Anita Singh: At under ₹20L turnover, registration is not mandatory but voluntary registration has advantages.',meta:['47 votes','8 answers'],url:'qa-forum.html'},
+  {type:'qa',icon:'💬',iconCls:'ri-blue',cat:'Community Q&A',title:'How do I price my tiffin service?',excerpt:'Answered by Meera Iyer: Use cost + labour + overhead + 30% profit margin formula.',meta:['38 votes','5 answers'],url:'qa-forum.html'},
+  {type:'qa',icon:'💬',iconCls:'ri-blue',cat:'Community Q&A',title:'What documents for a sole proprietorship bank account?',excerpt:'PAN, Aadhaar, MSME certificate, Shops & Establishment license, and 2 photos.',meta:['29 votes','6 answers'],url:'qa-forum.html'},
+  // Pages
+  {type:'page',icon:'📝',iconCls:'ri-green',cat:'Tool',title:'Business Plan Generator',excerpt:'Generate a complete business plan in minutes — executive summary, financials, SWOT, timeline.',meta:[],url:'business-plan.html'},
+  {type:'page',icon:'🧮',iconCls:'ri-yellow',cat:'Tool',title:'Cost & Pricing Calculator',excerpt:'Calculate the right price for your services. Includes break-even and income goal planner.',meta:[],url:'cost-calculator.html'},
+  {type:'page',icon:'⚖️',iconCls:'ri-blue',cat:'Guide',title:'Legal & Compliance Guide',excerpt:'8-topic legal guide: business structure, GST, MSME, contracts, income tax, and labour law.',meta:[],url:'legal-guide.html'},
+  {type:'page',icon:'🏛️',iconCls:'ri-green',cat:'Tool',title:'Government Scheme Finder',excerpt:'Find schemes you qualify for: Mudra loans, Stand-Up India, PMKVY, and 9 more.',meta:[],url:'scheme-finder.html'},
+];
+
+const typeConfig = {
+  all:      { label:'All', icon:'✨' },
+  idea:     { label:'Business ideas', icon:'💡' },
+  mentor:   { label:'Mentors', icon:'👥' },
+  resource: { label:'Resources', icon:'📚' },
+  qa:       { label:'Q&A', icon:'💬' },
+  page:     { label:'Pages & tools', icon:'🔧' },
+};
+
+const recentSearches = ['GST registration', 'how to price services', 'MSME registration', 'Instagram marketing'];
+const trending = [
+  {icon:'📋',title:'MSME registration steps',count:'2,400 searches'},
+  {icon:'💰',title:'How to get a Mudra loan',count:'1,800 searches'},
+  {icon:'🧾',title:'GST for tailoring business',count:'1,600 searches'},
+  {icon:'📱',title:'WhatsApp Business setup',count:'1,200 searches'},
+  {icon:'👩‍💼',title:'Women entrepreneur schemes',count:'980 searches'},
+  {icon:'📸',title:'Instagram content for salons',count:'860 searches'},
+];
+
+let currentFilter = 'all';
+let currentQuery = '';
+
+function counts(q) {
+  const res = q ? allItems.filter(item => matchItem(item, q)) : allItems;
+  const c = {};
+  Object.keys(typeConfig).forEach(k => {
+    c[k] = k === 'all' ? res.length : res.filter(i => i.type === k).length;
+  });
+  return c;
+}
+
+function matchItem(item, q) {
+  const lq = q.toLowerCase();
+  return item.title.toLowerCase().includes(lq) ||
+    item.excerpt.toLowerCase().includes(lq) ||
+    item.cat.toLowerCase().includes(lq) ||
+    (item.meta||[]).some(m => m.toLowerCase().includes(lq));
+}
+
+function highlight(text, q) {
+  if (!q) return text;
+  const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function renderTabs(q) {
+  const c = counts(q);
+  document.getElementById('searchTabs').innerHTML = Object.entries(typeConfig).map(([key, cfg]) =>
+    `<button class="s-tab ${currentFilter===key?'active':''}" onclick="setFilter('${key}')">
+      ${cfg.icon} ${cfg.label}
+      <span class="s-tab-count">${c[key]}</span>
+    </button>`
+  ).join('');
+}
+
+function setFilter(f) {
+  currentFilter = f;
+  renderTabs(currentQuery);
+  renderResults(currentQuery);
+}
+
+function handleSearch(val) {
+  currentQuery = val;
+  const wrap = document.getElementById('searchWrap');
+  wrap.classList.toggle('has-value', val.length > 0);
+  renderTabs(val);
+  renderResults(val);
+}
+
+function clearSearch() {
+  document.getElementById('mainSearch').value = '';
+  handleSearch('');
+  document.getElementById('mainSearch').focus();
+}
+
+function doSearch(q) {
+  document.getElementById('mainSearch').value = q;
+  handleSearch(q);
+}
+
+function renderResults(q) {
+  const content = document.getElementById('mainContent');
+
+  if (!q) {
+    content.innerHTML = `
+      <div class="suggestions-section">
+        <div class="ss-title">🕐 Recent searches</div>
+        <div class="suggestions-grid">${recentSearches.map(s=>`<div class="suggestion-chip recent-chip" onclick="doSearch('${s}')"><span>🕐</span>${s}</div>`).join('')}</div>
+      </div>
+      <div class="suggestions-section">
+        <div class="ss-title">💡 Try searching for</div>
+        <div class="suggestions-grid">${['GST registration','MSME benefits','how to price services','Instagram growth','Mudra loan','FSSAI license','bridal pricing','WhatsApp Business'].map(s=>`<div class="suggestion-chip" onclick="doSearch('${s}')"><span>🔍</span>${s}</div>`).join('')}</div>
+      </div>
+      <div class="trending-section">
+        <div style="font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-0.3px;margin-bottom:16px;">🔥 Trending on EntreSkill</div>
+        ${trending.map((t,i)=>`<div class="trending-item" onclick="doSearch('${t.title}')"><div class="ti-rank">${i+1}</div><div class="ti-icon">${t.icon}</div><div class="ti-title">${t.title}</div><div class="ti-count">${t.count}</div></div>`).join('')}
+      </div>`;
+    return;
+  }
+
+  let results = allItems.filter(item => matchItem(item, q));
+  if (currentFilter !== 'all') results = results.filter(i => i.type === currentFilter);
+  results.sort((a,b) => {
+    const sa = a.title.toLowerCase().includes(q.toLowerCase()) ? 2 : 1;
+    const sb = b.title.toLowerCase().includes(q.toLowerCase()) ? 2 : 1;
+    return sb - sa;
+  });
+
+  if (!results.length) {
+    content.innerHTML = `
+      <div class="no-results">
+        <div class="nr-icon">🔍</div>
+        <div class="nr-title">No results for "${q}"</div>
+        <div class="nr-sub">Try different keywords, or browse by category using the tabs above.</div>
+        <div class="suggestions-grid" style="justify-content:center;margin-top:12px;">${['GST registration','pricing calculator','MSME loan','Instagram tips'].map(s=>`<div class="suggestion-chip" onclick="doSearch('${s}')">Try: ${s}</div>`).join('')}</div>
+      </div>`;
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="results-meta">
+      <span><strong>${results.length}</strong> result${results.length!==1?'s':''} for "<strong>${q}</strong>"</span>
+      <span style="font-size:12px;">Sorted by relevance</span>
+    </div>
+    ${results.map(item => `
+      <div class="result-item" onclick="window.location='${item.url}'">
+        <div class="ri-icon ${item.iconCls}">${item.icon}</div>
+        <div class="ri-body">
+          <div class="ri-cat">${item.cat}</div>
+          <div class="ri-title">${highlight(item.title, q)}</div>
+          <div class="ri-excerpt">${highlight(item.excerpt, q)}</div>
+          ${item.meta.length ? `<div class="ri-meta">${item.meta.map(m=>`<span>· ${m}</span>`).join('')}</div>` : ''}
+        </div>
+        <div class="ri-arrow">→</div>
+      </div>`).join('')}`;
+}
+
+// Init
+renderTabs('');
+renderResults('');
+
+// Check URL param
+const urlQ = new URLSearchParams(window.location.search).get('q');
+if (urlQ) { document.getElementById('mainSearch').value = urlQ; handleSearch(urlQ); }
+</script>
+</body>
+</html>

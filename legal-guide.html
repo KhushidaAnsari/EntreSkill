@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legal & Compliance Guide — EntreSkill Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--sidebar:220px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;--radius-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar);background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo a{font-family:var(--font-display);font-weight:800;font-size:17px;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#52b788;}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.5);font-size:14px;text-decoration:none;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(82,183,136,0.18);color:#52b788;}
+.nav-icon{font-size:17px;width:20px;text-align:center;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
+.user-role{font-size:11px;color:rgba(255,255,255,0.35);}
+.main{margin-left:var(--sidebar);flex:1;}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.content{padding:36px;max-width:1060px;}
+.layout{display:grid;grid-template-columns:240px 1fr;gap:28px;align-items:start;}
+
+/* LEFT NAV */
+.topic-nav{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px;position:sticky;top:90px;}
+.tn-title{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.tn-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);font-size:14px;cursor:pointer;transition:all .15s;margin-bottom:2px;}
+.tn-item:hover{background:var(--paper);}
+.tn-item.active{background:var(--accent-pale);color:var(--accent);font-weight:500;}
+.tn-icon{font-size:16px;width:20px;text-align:center;}
+.tn-done{margin-left:auto;font-size:12px;color:var(--accent);}
+
+/* HERO */
+.guide-hero{background:var(--ink);border-radius:var(--radius);padding:36px;margin-bottom:24px;position:relative;overflow:hidden;}
+.guide-hero::before{content:'';position:absolute;width:280px;height:280px;border-radius:50%;background:rgba(82,183,136,0.1);top:-80px;right:-60px;}
+.gh-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:12px;}
+.gh-title{font-family:var(--font-display);font-size:26px;font-weight:800;letter-spacing:-1px;color:white;margin-bottom:8px;}
+.gh-sub{font-size:14px;color:rgba(255,255,255,0.5);}
+.gh-tags{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap;}
+.gh-tag{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-size:12px;padding:4px 12px;border-radius:50px;}
+
+/* TOPIC PANE */
+.topic-pane{display:none;}
+.topic-pane.active{display:block;}
+.topic-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px;}
+.tc-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
+.tc-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.tci-blue{background:#e6f1fb;}
+.tci-green{background:var(--accent-pale);}
+.tci-warm{background:var(--warm-pale);}
+.tci-purple{background:#f3e6fb;}
+.tci-yellow{background:#faeeda;}
+.tc-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.tc-sub{font-size:13px;color:var(--muted);margin-top:2px;}
+.tc-body{font-size:14px;color:var(--muted);line-height:1.8;}
+.tc-body strong{color:var(--ink);}
+.tc-body ul{margin:10px 0 10px 20px;}
+.tc-body li{margin-bottom:7px;}
+.highlight-box{background:var(--accent-pale);border-left:4px solid var(--accent);padding:14px 18px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:16px 0;font-size:14px;color:var(--ink);line-height:1.6;}
+.warn-box{background:var(--warm-pale);border-left:4px solid var(--warm);padding:14px 18px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:16px 0;font-size:14px;color:var(--ink);line-height:1.6;}
+.step-list{display:flex;flex-direction:column;gap:12px;margin:16px 0;}
+.step-item{display:flex;gap:14px;align-items:flex-start;}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--ink);color:white;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:13px;flex-shrink:0;margin-top:2px;}
+.step-text{font-size:14px;line-height:1.6;color:var(--muted);}
+.step-text strong{color:var(--ink);}
+.doc-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.doc-item{background:var(--paper);border-radius:var(--radius-sm);padding:12px 14px;font-size:13px;display:flex;align-items:center;gap:8px;}
+.doc-icon{font-size:16px;}
+.faq-item{border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;overflow:hidden;}
+.faq-q{padding:14px 18px;font-size:14px;font-weight:500;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background .15s;}
+.faq-q:hover{background:var(--paper);}
+.faq-a{padding:0 18px;font-size:14px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:all .3s;}
+.faq-a.open{padding:0 18px 14px;max-height:400px;}
+.cost-table{width:100%;border-collapse:collapse;margin:14px 0;}
+.cost-table th{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.3px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--paper);}
+.cost-table td{padding:11px 14px;font-size:14px;border-bottom:1px solid rgba(224,221,212,0.5);}
+.cost-table tr:last-child td{border-bottom:none;}
+.free-badge{background:var(--accent-pale);color:var(--accent);font-size:11px;font-weight:600;padding:2px 8px;border-radius:50px;}
+.btn-resource{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:white;border:none;border-radius:50px;padding:10px 20px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;margin-top:16px;text-decoration:none;transition:all .15s;}
+.btn-resource:hover{background:var(--ink);}
+.mark-done{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:1.5px solid var(--border);border-radius:50px;padding:8px 18px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;margin-top:12px;margin-left:10px;transition:all .15s;}
+.mark-done:hover{background:var(--accent-pale);border-color:var(--accent);}
+.mark-done.done{background:var(--accent);color:white;border-color:var(--accent);}
+@media(max-width:1000px){.layout{grid-template-columns:1fr;}.topic-nav{position:static;}}
+@media(max-width:900px){.sidebar{width:60px;}.sidebar-logo a span:not(.logo-dot){display:none;}.nav-item span:not(.nav-icon){display:none;}.nav-section,.user-name,.user-role{display:none;}.main{margin-left:60px;}.doc-list{grid-template-columns:1fr;}}
+@media(max-width:600px){.content{padding:20px;}.topbar{padding:14px 20px;}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+    <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
+    <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
+    <a class="nav-item" href="mentor-directory.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
+    <a class="nav-item" href="business-ideas.html"><span class="nav-icon">💡</span><span>Business Ideas</span></a>
+    <a class="nav-item active" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
+    <a class="nav-item" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
+    <a class="nav-item" href="business-plan.html"><span class="nav-icon">📝</span><span>Business Plan</span></a>
+    <a class="nav-item" href="cost-calculator.html"><span class="nav-icon">🧮</span><span>Calculator</span></a>
+    <a class="nav-item" href="qa-forum.html"><span class="nav-icon">💬</span><span>Community</span></a>
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress</span></a>
+    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin</span></a>
+    <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+  </nav>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">PR</div><div><div class="user-name">Priya Ramesh</div><div class="user-role">Entrepreneur</div></div></div></div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">Legal & Compliance Guide</div>
+    <div style="font-size:13px;color:var(--muted);">Plain-language legal guidance for micro-entrepreneurs</div>
+  </div>
+  <div class="content">
+    <div class="layout">
+      <div class="topic-nav">
+        <div class="tn-title">Topics</div>
+        <div class="tn-item active" onclick="showTopic('structure',this)"><span class="tn-icon">🏗️</span>Business structure<span class="tn-done" id="done-structure"></span></div>
+        <div class="tn-item" onclick="showTopic('registration',this)"><span class="tn-icon">📋</span>Registration<span class="tn-done" id="done-registration"></span></div>
+        <div class="tn-item" onclick="showTopic('gst',this)"><span class="tn-icon">🧾</span>GST basics<span class="tn-done" id="done-gst"></span></div>
+        <div class="tn-item" onclick="showTopic('msme',this)"><span class="tn-icon">🏭</span>MSME / Udyam<span class="tn-done" id="done-msme"></span></div>
+        <div class="tn-item" onclick="showTopic('banking',this)"><span class="tn-icon">🏦</span>Business banking<span class="tn-done" id="done-banking"></span></div>
+        <div class="tn-item" onclick="showTopic('contracts',this)"><span class="tn-icon">📄</span>Contracts & clients<span class="tn-done" id="done-contracts"></span></div>
+        <div class="tn-item" onclick="showTopic('tax',this)"><span class="tn-icon">💸</span>Income tax basics<span class="tn-done" id="done-tax"></span></div>
+        <div class="tn-item" onclick="showTopic('labour',this)"><span class="tn-icon">👷</span>Hiring & labour law<span class="tn-done" id="done-labour"></span></div>
+      </div>
+
+      <div>
+        <!-- BUSINESS STRUCTURE -->
+        <div class="topic-pane active" id="pane-structure">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 1 of 8</div>
+            <div class="gh-title">Choosing your business structure</div>
+            <div class="gh-sub">The most important first decision — and luckily, the simplest for most micro-entrepreneurs.</div>
+            <div class="gh-tags"><span class="gh-tag">Beginner</span><span class="gh-tag">15 min read</span><span class="gh-tag">One-time decision</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-blue">🏗️</div><div><div class="tc-title">What is a business structure?</div><div class="tc-sub">How your business is legally organised</div></div></div>
+            <div class="tc-body">Your business structure determines how you pay taxes, your personal liability if something goes wrong, and how easy it is to get bank accounts or loans. For most home-based micro-entrepreneurs starting out, there are three realistic options:<br><br>
+            <strong>1. Sole Proprietorship</strong> — You and the business are legally the same person. The simplest structure, no formal registration required (though you should register for GST, Shops & Establishment, or MSME). Best for: tailors, tutors, beauticians, repair technicians, food makers.<br><br>
+            <strong>2. One Person Company (OPC)</strong> — A single-person company with limited liability. More complex to set up, requires a company registration. Best when you expect high turnover (above ₹40–50 lakh) or want formal investor interest.<br><br>
+            <strong>3. Partnership Firm</strong> — Two or more people running a business together. Requires a Partnership Deed. Best when starting a business with a family member or trusted friend.
+            </div>
+            <div class="highlight-box">✅ <strong>Recommendation for 95% of EntreSkill users:</strong> Start as a Sole Proprietorship. It requires zero formal registration to begin, costs nothing, and you can always upgrade to an OPC or Private Limited Company later when you outgrow it.</div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-green">⚖️</div><div><div class="tc-title">Comparison table</div><div class="tc-sub">Side-by-side: which structure fits you?</div></div></div>
+            <table class="cost-table">
+              <thead><tr><th>Factor</th><th>Sole Proprietorship</th><th>OPC</th><th>Partnership</th></tr></thead>
+              <tbody>
+                <tr><td>Setup cost</td><td>₹0–₹2,000</td><td>₹8,000–₹15,000</td><td>₹2,000–₹5,000</td></tr>
+                <tr><td>Personal liability</td><td>Unlimited</td><td>Limited</td><td>Unlimited</td></tr>
+                <tr><td>Compliance burden</td><td>Very low</td><td>High</td><td>Medium</td></tr>
+                <tr><td>Bank account</td><td>Easy to open</td><td>Requires ROC cert</td><td>Requires deed</td></tr>
+                <tr><td>Best for turnover</td><td>Up to ₹40L</td><td>₹40L–₹5Cr</td><td>₹5L–₹2Cr</td></tr>
+                <tr><td>Tax filing</td><td>Personal ITR</td><td>Separate company ITR</td><td>Partnership ITR</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn-resource" onclick="showTopic('registration',document.querySelectorAll('.tn-item')[1])">Next: Registration guide →</button>
+          <button class="mark-done" id="markdone-structure" onclick="markDone('structure')">Mark as read</button>
+        </div>
+
+        <!-- REGISTRATION -->
+        <div class="topic-pane" id="pane-registration">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 2 of 8</div>
+            <div class="gh-title">Business registration — step by step</div>
+            <div class="gh-sub">Which registrations do you actually need, and in what order?</div>
+            <div class="gh-tags"><span class="gh-tag">Beginner</span><span class="gh-tag">20 min read</span><span class="gh-tag">One-time</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-green">📋</div><div><div class="tc-title">The recommended registration order</div><div class="tc-sub">Do these in sequence — each one builds on the previous</div></div></div>
+            <div class="step-list">
+              <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Udyam / MSME Registration (Free — do this first)</strong><br>Visit udyamregistration.gov.in, enter your Aadhaar and PAN. Takes 10 minutes. Gives you an official MSME certificate which banks accept as business proof.</div></div>
+              <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Shops & Establishment Registration (₹200–₹1,000)</strong><br>Required if you operate from a premises (even home-based in many states). Apply at your local municipal corporation or labour department. Needed for bank accounts.</div></div>
+              <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Business Bank Account</strong><br>Now that you have your MSME certificate and Shops & Establishment license, open a current account at any bank. Keep business money separate from personal money — this is non-negotiable.</div></div>
+              <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>GST Registration (if needed)</strong><br>Mandatory only if annual turnover exceeds ₹20 lakh (₹10 lakh for special category states). Optional but recommended if your clients are businesses who need GST invoices.</div></div>
+              <div class="step-item"><div class="step-num">5</div><div class="step-text"><strong>Trade License (for specific businesses)</strong><br>Food businesses need FSSAI. Pharmacies, salons, and some repair shops may need a trade or health license from local authorities. Check your city's requirements.</div></div>
+            </div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-yellow">📄</div><div><div class="tc-title">Documents you'll need</div><div class="tc-sub">Collect these before starting any registration</div></div></div>
+            <div class="doc-list">
+              <div class="doc-item"><span class="doc-icon">🪪</span>Aadhaar card (original)</div>
+              <div class="doc-item"><span class="doc-icon">💳</span>PAN card</div>
+              <div class="doc-item"><span class="doc-icon">🏠</span>Address proof (electricity bill / rent agreement)</div>
+              <div class="doc-item"><span class="doc-icon">📸</span>2 passport-size photographs</div>
+              <div class="doc-item"><span class="doc-icon">🏦</span>Bank account details (for MSME)</div>
+              <div class="doc-item"><span class="doc-icon">📱</span>Mobile number linked to Aadhaar</div>
+            </div>
+          </div>
+          <button class="btn-resource" onclick="showTopic('gst',document.querySelectorAll('.tn-item')[2])">Next: GST basics →</button>
+          <button class="mark-done" id="markdone-registration" onclick="markDone('registration')">Mark as read</button>
+        </div>
+
+        <!-- GST -->
+        <div class="topic-pane" id="pane-gst">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 3 of 8</div>
+            <div class="gh-title">GST basics for micro-entrepreneurs</div>
+            <div class="gh-sub">Everything you need to know about GST — without the jargon.</div>
+            <div class="gh-tags"><span class="gh-tag">Intermediate</span><span class="gh-tag">25 min read</span><span class="gh-tag">Monthly compliance</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-blue">🧾</div><div><div class="tc-title">Do you need GST registration?</div><div class="tc-sub">The simple answer</div></div></div>
+            <div class="tc-body">
+              <strong>Mandatory:</strong> Yes, if your annual business turnover exceeds ₹20 lakh (₹40 lakh for goods sellers; ₹10 lakh for special category states like Manipur, Uttarakhand, etc.)<br><br>
+              <strong>Voluntary:</strong> You can register even below the threshold. Advantages: issue GST invoices to business clients, claim input tax credit on your purchases, appear more professional.
+            </div>
+            <div class="highlight-box">💡 <strong>Rule of thumb:</strong> If more than 20% of your clients are businesses (not individuals), get GST registration even if your turnover is below ₹20 lakh. It makes you eligible for their vendor lists and input tax credit.</div>
+            <div class="warn-box">⚠️ <strong>Once registered,</strong> you must file GSTR-1 and GSTR-3B every month, even if you had zero sales. Missing filings attracts penalties of ₹50/day (minimum ₹200 per return).</div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-warm">📊</div><div><div class="tc-title">GST rates for common micro-businesses</div></div></div>
+            <table class="cost-table">
+              <thead><tr><th>Business type</th><th>GST rate</th><th>Notes</th></tr></thead>
+              <tbody>
+                <tr><td>Tailoring / stitching services</td><td>5%</td><td>On labour charges only</td></tr>
+                <tr><td>Food (home tiffin / restaurant)</td><td>5%</td><td>No ITC available at 5%</td></tr>
+                <tr><td>Beauty salon services</td><td>18%</td><td>Can claim ITC on products</td></tr>
+                <tr><td>Repair services (phone/electronics)</td><td>18%</td><td>On service value</td></tr>
+                <tr><td>Graphic design / freelance IT</td><td>18%</td><td>Professional services rate</td></tr>
+                <tr><td>Tutoring / coaching</td><td>Exempt</td><td>Educational services exempt</td></tr>
+                <tr><td>Handmade crafts / handicrafts</td><td>0–12%</td><td>Varies by product category</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-purple">❓</div><div><div class="tc-title">Common GST questions</div></div></div>
+            <div id="gstFaqs"></div>
+          </div>
+          <button class="btn-resource" onclick="showTopic('msme',document.querySelectorAll('.tn-item')[3])">Next: MSME Registration →</button>
+          <button class="mark-done" id="markdone-gst" onclick="markDone('gst')">Mark as read</button>
+        </div>
+
+        <!-- MSME -->
+        <div class="topic-pane" id="pane-msme">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 4 of 8</div>
+            <div class="gh-title">MSME / Udyam Registration</div>
+            <div class="gh-sub">The single most valuable free registration for any micro-entrepreneur in India.</div>
+            <div class="gh-tags"><span class="gh-tag">Beginner</span><span class="gh-tag">Free</span><span class="gh-tag">10 min to complete</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-green">🏭</div><div><div class="tc-title">What is MSME / Udyam registration?</div></div></div>
+            <div class="tc-body">Udyam Registration (formerly MSME registration) is a government certificate that officially classifies your business as a Micro, Small, or Medium Enterprise. It is <strong>completely free</strong>, done entirely online at udyamregistration.gov.in, and takes about 10 minutes with just your Aadhaar and PAN.<br><br>
+            <strong>Benefits of MSME registration:</strong>
+            <ul>
+              <li>Priority lending from banks at lower interest rates (PM Mudra Yojana, Stand-Up India)</li>
+              <li>Collateral-free loans up to ₹10 lakh (CGTMSE scheme)</li>
+              <li>Government tenders — 25% reserved for MSMEs</li>
+              <li>Protection against delayed payments from buyers (MSMED Act)</li>
+              <li>Tax benefits and subsidies under various state and central schemes</li>
+              <li>Accepted as business proof for opening bank accounts</li>
+            </ul>
+            </div>
+            <div class="highlight-box">✅ <strong>Do this today.</strong> Udyam registration is free, fast, and the benefits are enormous. There is absolutely no reason not to register. Go to udyamregistration.gov.in right now.</div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-blue">📋</div><div><div class="tc-title">MSME size categories</div></div></div>
+            <table class="cost-table">
+              <thead><tr><th>Category</th><th>Investment limit</th><th>Turnover limit</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Micro</strong> (most home businesses)</td><td>Up to ₹1 crore</td><td>Up to ₹5 crore</td></tr>
+                <tr><td><strong>Small</strong></td><td>Up to ₹10 crore</td><td>Up to ₹50 crore</td></tr>
+                <tr><td><strong>Medium</strong></td><td>Up to ₹50 crore</td><td>Up to ₹250 crore</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:14px;">Most EntreSkill users will qualify as <strong>Micro enterprises</strong> — the best category for accessing government support schemes.</div>
+          </div>
+          <button class="btn-resource" href="https://udyamregistration.gov.in" onclick="alert('This would open udyamregistration.gov.in in a new tab.')">🔗 Register on Udyam Portal</button>
+          <button class="mark-done" id="markdone-msme" onclick="markDone('msme')">Mark as read</button>
+        </div>
+
+        <!-- BANKING -->
+        <div class="topic-pane" id="pane-banking">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 5 of 8</div>
+            <div class="gh-title">Business banking essentials</div>
+            <div class="gh-sub">Why a separate business account is non-negotiable — and how to open one.</div>
+            <div class="gh-tags"><span class="gh-tag">Beginner</span><span class="gh-tag">15 min read</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-blue">🏦</div><div><div class="tc-title">Why you must separate business and personal finances</div></div></div>
+            <div class="tc-body">Mixing personal and business money is the #1 financial mistake new entrepreneurs make. Here's why separation matters:<ul>
+              <li><strong>Tax filing becomes impossible</strong> — you can't tell which expenses are business vs personal</li>
+              <li><strong>Profit is invisible</strong> — you don't know if your business is actually making money</li>
+              <li><strong>Clients don't trust you</strong> — paying to a personal account looks unprofessional</li>
+              <li><strong>Loans are harder</strong> — banks need 6 months of business bank statements for loans</li>
+              <li><strong>GST compliance fails</strong> — all GST transactions must flow through a business account</li>
+            </ul></div>
+            <div class="warn-box">⚠️ Open your business bank account in the first month. Do not wait until you're "big enough." You're big enough right now.</div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-green">📋</div><div><div class="tc-title">Documents needed to open a sole proprietorship current account</div></div></div>
+            <div class="doc-list">
+              <div class="doc-item"><span class="doc-icon">🪪</span>PAN card</div>
+              <div class="doc-item"><span class="doc-icon">🪪</span>Aadhaar card</div>
+              <div class="doc-item"><span class="doc-icon">🏠</span>Business address proof</div>
+              <div class="doc-item"><span class="doc-icon">🏭</span>MSME / Udyam certificate</div>
+              <div class="doc-item"><span class="doc-icon">📋</span>Shops & Establishment license</div>
+              <div class="doc-item"><span class="doc-icon">💰</span>Initial deposit (varies by bank)</div>
+            </div>
+            <div style="margin-top:14px;font-size:14px;color:var(--muted);">Tip: SBI and Bank of Baroda have zero-balance business accounts for MSME-registered businesses. HDFC and ICICI offer better digital banking but require higher minimum balances.</div>
+          </div>
+          <button class="mark-done" id="markdone-banking" onclick="markDone('banking')">Mark as read</button>
+        </div>
+
+        <!-- CONTRACTS -->
+        <div class="topic-pane" id="pane-contracts">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 6 of 8</div>
+            <div class="gh-title">Contracts, invoices & client agreements</div>
+            <div class="gh-sub">Protect yourself and look professional — even as a solo operator.</div>
+            <div class="gh-tags"><span class="gh-tag">Intermediate</span><span class="gh-tag">20 min read</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-warm">📄</div><div><div class="tc-title">Every invoice must include these elements</div></div></div>
+            <div class="step-list">
+              <div class="step-item"><div class="step-num">1</div><div class="step-text"><strong>Your business name, address, and contact</strong></div></div>
+              <div class="step-item"><div class="step-num">2</div><div class="step-text"><strong>Client's name and address</strong></div></div>
+              <div class="step-item"><div class="step-num">3</div><div class="step-text"><strong>Invoice number</strong> (sequential: INV-001, INV-002…)</div></div>
+              <div class="step-item"><div class="step-num">4</div><div class="step-text"><strong>Date of invoice and due date</strong></div></div>
+              <div class="step-item"><div class="step-num">5</div><div class="step-text"><strong>Itemised list of services/products with amounts</strong></div></div>
+              <div class="step-item"><div class="step-num">6</div><div class="step-text"><strong>GST amount separately shown</strong> (if GST-registered)</div></div>
+              <div class="step-item"><div class="step-num">7</div><div class="step-text"><strong>Payment terms</strong> (e.g. "Due within 7 days of delivery")</div></div>
+              <div class="step-item"><div class="step-num">8</div><div class="step-text"><strong>Bank account / UPI details</strong> for payment</div></div>
+            </div>
+            <div class="highlight-box">💡 Use free tools: <strong>Zoho Invoice</strong> (free), <strong>Wave</strong> (free), or even <strong>Google Docs</strong> templates. Professional invoices build trust and speed up payment.</div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-purple">🤝</div><div><div class="tc-title">Simple client agreement — what to include</div></div></div>
+            <div class="tc-body">For any order above ₹2,000, send a brief written agreement (even on WhatsApp) confirming:<ul>
+              <li><strong>Scope of work</strong> — exactly what you will deliver</li>
+              <li><strong>Timeline</strong> — when you will deliver</li>
+              <li><strong>Price</strong> — total cost and payment schedule</li>
+              <li><strong>Advance payment</strong> — always take 30–50% upfront for custom work</li>
+              <li><strong>Revision policy</strong> — how many changes are included</li>
+              <li><strong>Cancellation terms</strong> — what happens if the client cancels</li>
+            </ul>
+            A WhatsApp message saying "Confirming our order: 1 custom blouse in blue fabric, delivery by May 20, total ₹1,200, advance ₹600 received" is a legally binding agreement in India.</div>
+          </div>
+          <button class="mark-done" id="markdone-contracts" onclick="markDone('contracts')">Mark as read</button>
+        </div>
+
+        <!-- TAX -->
+        <div class="topic-pane" id="pane-tax">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 7 of 8</div>
+            <div class="gh-title">Income tax basics for sole proprietors</div>
+            <div class="gh-sub">How your business income is taxed — and how to minimise your tax liability legally.</div>
+            <div class="gh-tags"><span class="gh-tag">Intermediate</span><span class="gh-tag">Annual task</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-yellow">💸</div><div><div class="tc-title">How sole proprietorship income is taxed</div></div></div>
+            <div class="tc-body">As a sole proprietor, your business income is treated as your personal income. You file ITR-3 (or ITR-4 under presumptive taxation). Tax slabs for FY 2025–26:<br><br></div>
+            <table class="cost-table">
+              <thead><tr><th>Income slab</th><th>Tax rate (New regime)</th></tr></thead>
+              <tbody>
+                <tr><td>Up to ₹3,00,000</td><td>Nil</td></tr>
+                <tr><td>₹3,00,001 – ₹7,00,000</td><td>5%</td></tr>
+                <tr><td>₹7,00,001 – ₹10,00,000</td><td>10%</td></tr>
+                <tr><td>₹10,00,001 – ₹12,00,000</td><td>15%</td></tr>
+                <tr><td>₹12,00,001 – ₹15,00,000</td><td>20%</td></tr>
+                <tr><td>Above ₹15,00,000</td><td>30%</td></tr>
+              </tbody>
+            </table>
+            <div class="highlight-box">💡 <strong>Presumptive Taxation (Section 44ADA):</strong> If your professional income is below ₹50 lakh, you can declare 50% of your gross receipts as profit and pay tax only on that — no need to maintain detailed books. Huge simplification for freelancers and service providers.</div>
+          </div>
+          <button class="mark-done" id="markdone-tax" onclick="markDone('tax')">Mark as read</button>
+        </div>
+
+        <!-- LABOUR -->
+        <div class="topic-pane" id="pane-labour">
+          <div class="guide-hero">
+            <div class="gh-label">Topic 8 of 8</div>
+            <div class="gh-title">Hiring & basic labour law</div>
+            <div class="gh-sub">What you need to know before hiring your first helper or assistant.</div>
+            <div class="gh-tags"><span class="gh-tag">Intermediate</span><span class="gh-tag">When scaling</span></div>
+          </div>
+          <div class="topic-card">
+            <div class="tc-header"><div class="tc-icon tci-purple">👷</div><div><div class="tc-title">Employee vs contractor — which to hire?</div></div></div>
+            <div class="tc-body"><strong>Contract worker / freelancer:</strong> Pay per task or day. No PF, ESI, or long-term obligations. Best for occasional help (e.g. a helper during wedding season).<br><br>
+            <strong>Full-time employee:</strong> Fixed monthly salary. You're legally required to pay PF (12% of basic salary) and ESI (if salary below ₹21,000/month) once you have 10+ employees.<br><br>
+            <strong>For most home micro-businesses:</strong> Start with a contract arrangement. Pay a daily or per-piece rate. Keep a simple written agreement specifying the work, rate, and that they're an independent contractor.</div>
+            <div class="highlight-box">💡 <strong>Recommendation:</strong> Start by hiring a contract helper 2–3 days/week. Once your order volume consistently exceeds your capacity for 2+ months, consider a full-time hire.</div>
+          </div>
+          <button class="mark-done" id="markdone-labour" onclick="markDone('labour')">Mark as read ✓</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const gstFaqs=[
+  {q:"Can I charge GST if I'm not registered?",a:"No. Charging GST without registration is illegal. You can only collect and remit GST if you're registered. Before registration, your invoice should not show any GST — just the total service price."},
+  {q:"What is Input Tax Credit (ITC)?",a:"ITC lets you deduct the GST you paid on your business purchases from the GST you collected from clients. For example: you paid ₹180 GST on thread and accessories, and collected ₹500 GST from clients → you pay only ₹320 to the government."},
+  {q:"How do I file GST returns?",a:"Login to gst.gov.in. File GSTR-1 by the 11th of each month (sales details) and GSTR-3B by the 20th (summary + payment). For most micro-businesses, the QRMP scheme (quarterly filing) is easier — check if you're eligible."},
+  {q:"What if my turnover crosses ₹20L mid-year?",a:"You must register within 30 days of crossing the threshold. Any sales after crossing ₹20L must include GST even before you receive your registration certificate."},
+];
+document.getElementById('gstFaqs').innerHTML=gstFaqs.map((f,i)=>`
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(${i})"><span>${f.q}</span><span id="faq-arrow-${i}">▼</span></div>
+    <div class="faq-a" id="faq-a-${i}">${f.a}</div>
+  </div>`).join('');
+
+function toggleFaq(i){
+  const a=document.getElementById('faq-a-'+i);
+  const arr=document.getElementById('faq-arrow-'+i);
+  a.classList.toggle('open');
+  arr.textContent=a.classList.contains('open')?'▲':'▼';
+}
+
+const done=new Set();
+function showTopic(name,el){
+  document.querySelectorAll('.topic-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tn-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+}
+function markDone(name){
+  done.add(name);
+  const btn=document.getElementById('markdone-'+name);
+  btn.classList.add('done');
+  btn.textContent='✓ Read';
+  document.getElementById('done-'+name).textContent='✓';
+}
+</script>
+</body>
+</html>
