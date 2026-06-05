@@ -156,7 +156,7 @@ body{font-family:var(--font-body);background:var(--paper);color:var(--ink);displ
   </div>
   <div class="content">
     <div class="greeting">
-      <h1>Welcome back, Meera 👋</h1>
+      <h1 id="dashboardGreeting">Welcome back, Mentor 👋</h1>
       <p>You have 2 sessions today and 3 new mentee requests waiting.</p>
     </div>
 
@@ -455,6 +455,8 @@ const initials = savedName
 
 const dashboardUserName = document.getElementById('dashboardUserName');
 if (dashboardUserName) dashboardUserName.textContent = firstName;
+const dashboardGreeting = document.getElementById('dashboardGreeting');
+if (dashboardGreeting) dashboardGreeting.textContent = `Welcome back, ${firstName} 👋`;
 document.getElementById('sidebarUserName').textContent = savedName;
 document.getElementById('userAvatar').textContent = initials;
 </script>
