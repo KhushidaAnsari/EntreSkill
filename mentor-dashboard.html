@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentor Dashboard — EntreSkill Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--sidebar:220px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;--radius-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar);background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo a{font-family:var(--font-display);font-weight:800;font-size:17px;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#52b788;}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.5);font-size:14px;text-decoration:none;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(82,183,136,0.18);color:#52b788;}
+.nav-icon{font-size:17px;width:20px;text-align:center;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:#e76f51;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
+.user-role{font-size:11px;color:rgba(255,255,255,0.35);}
+.main{margin-left:var(--sidebar);flex:1;}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.mentor-badge{background:var(--warm-pale);color:var(--warm);font-size:12px;font-weight:600;padding:5px 14px;border-radius:50px;letter-spacing:0.3px;}
+.btn-sm{background:var(--accent);color:white;border:none;border-radius:50px;padding:9px 20px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block;}
+.btn-sm:hover{background:var(--ink);}
+.content{padding:36px;}
+.greeting{margin-bottom:32px;}
+.greeting h1{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+.greeting p{color:var(--muted);font-size:15px;}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;}
+.stat-card.warm{background:var(--warm);border-color:var(--warm);}
+.stat-card.warm .sc-label,.stat-card.warm .sc-sub{color:rgba(255,255,255,0.65);}
+.stat-card.warm .sc-num{color:white;}
+.sc-label{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:10px;}
+.sc-num{font-family:var(--font-display);font-size:32px;font-weight:800;letter-spacing:-1.5px;margin-bottom:6px;}
+.sc-sub{font-size:12px;color:var(--muted);}
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;}
+.grid-32{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:24px;}
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.card-title{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-0.3px;}
+.card-link{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500;cursor:pointer;}
+/* SESSIONS */
+.session-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--paper);}
+.session-row:last-child{border-bottom:none;}
+.sess-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.sess-name{font-size:14px;font-weight:500;}
+.sess-meta{font-size:12px;color:var(--muted);}
+.sess-time{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap;}
+.sess-badge{font-size:11px;padding:3px 10px;border-radius:50px;font-weight:500;white-space:nowrap;}
+.sb-upcoming{background:var(--accent-pale);color:var(--accent);}
+.sb-done{background:var(--paper);color:var(--muted);}
+.sb-now{background:var(--warm-pale);color:var(--warm);}
+.btn-join{background:var(--warm);color:white;border:none;border-radius:50px;padding:6px 16px;font-size:12px;font-weight:500;cursor:pointer;margin-left:8px;}
+.btn-join:hover{background:var(--ink);}
+/* MENTEES */
+.mentee-card{display:flex;align-items:center;gap:14px;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;transition:border-color .15s;}
+.mentee-card:last-child{margin-bottom:0;}
+.mentee-card:hover{border-color:var(--accent-light);}
+.me-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:13px;color:white;flex-shrink:0;}
+.me-name{font-size:14px;font-weight:500;}
+.me-prog{font-size:12px;color:var(--muted);}
+.me-bar-wrap{margin-left:auto;width:80px;}
+.me-bar{height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-top:4px;}
+.me-fill{height:100%;background:var(--accent-light);border-radius:3px;}
+.me-pct{font-size:11px;color:var(--accent);text-align:right;}
+/* RESOURCES */
+.resource-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--paper);}
+.resource-row:last-child{border-bottom:none;}
+.res-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.ri-vid{background:var(--warm-pale);}
+.ri-art{background:#e6f1fb;}
+.ri-chk{background:var(--accent-pale);}
+.res-title{font-size:14px;font-weight:500;}
+.res-meta{font-size:12px;color:var(--muted);}
+.res-status{margin-left:auto;font-size:12px;font-weight:500;}
+.rs-approved{color:var(--accent);}
+.rs-pending{color:var(--warm);}
+/* UPLOAD FORM */
+.upload-box{border:2px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:20px;}
+.upload-box:hover{border-color:var(--accent-light);background:var(--accent-pale);}
+.upload-icon{font-size:32px;margin-bottom:10px;}
+.upload-text{font-size:14px;font-weight:500;margin-bottom:4px;}
+.upload-sub{font-size:12px;color:var(--muted);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:13px;font-weight:500;margin-bottom:7px;display:block;}
+.form-input,.form-select,.form-textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);font-family:var(--font-body);font-size:14px;color:var(--ink);outline:none;transition:border-color .2s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-textarea{resize:vertical;min-height:80px;}
+.btn-upload{background:var(--accent);color:white;border:none;border-radius:50px;padding:12px 28px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+.btn-upload:hover{background:var(--ink);}
+/* RATINGS */
+.rating-summary{display:flex;align-items:center;gap:24px;padding:20px;background:var(--paper);border-radius:var(--radius-sm);margin-bottom:20px;}
+.rating-big{text-align:center;}
+.rating-num{font-family:var(--font-display);font-size:48px;font-weight:800;letter-spacing:-2px;}
+.rating-stars{color:#f4b942;font-size:20px;margin:4px 0;}
+.rating-count{font-size:12px;color:var(--muted);}
+.rating-bars{flex:1;}
+.rb-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.rb-label{font-size:12px;color:var(--muted);width:20px;text-align:right;}
+.rb-track{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;}
+.rb-fill{height:100%;background:#f4b942;border-radius:3px;}
+.rb-count{font-size:12px;color:var(--muted);width:24px;}
+.review-item{padding:14px 0;border-bottom:1px solid var(--paper);}
+.review-item:last-child{border-bottom:none;}
+.rv-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.rv-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:11px;color:white;}
+.rv-name{font-size:14px;font-weight:500;}
+.rv-time{font-size:12px;color:var(--muted);margin-left:auto;}
+.rv-stars{color:#f4b942;font-size:13px;margin-bottom:6px;}
+.rv-text{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* TAB NAV */
+.tab-bar{display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--border);padding-bottom:0;}
+.tab-btn{padding:10px 20px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.tab-btn:hover{color:var(--ink);}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+@media(max-width:900px){.sidebar{width:60px;}.sidebar-logo a span:not(.logo-dot){display:none;}.nav-item span:not(.nav-icon){display:none;}.nav-section,.user-name,.user-role{display:none;}.main{margin-left:60px;}.stats-row{grid-template-columns:1fr 1fr;}.grid-2,.grid-32{grid-template-columns:1fr;}.form-row{grid-template-columns:1fr;}}
+@media(max-width:600px){.content{padding:20px;}.topbar{padding:14px 20px;}.stats-row{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="frontpage.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item active" href="mentor-dashboard.html"><span class="nav-icon">🏠</span><span>Mentor Dashboard</span></a>
+    <a class="nav-item" href="frontpage.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+  </nav>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="userAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="topbar-title">Mentor Dashboard</div>
+      <div class="mentor-badge">✓ Verified Mentor</div>
+    </div>
+    <button class="btn-sm" onclick="document.querySelector('[data-tab=upload]').click()">+ Upload resource</button>
+  </div>
+  <div class="content">
+    <div class="greeting">
+      <h1>Welcome back, Meera 👋</h1>
+      <p>You have 2 sessions today and 3 new mentee requests waiting.</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card warm"><div class="sc-label">Total sessions held</div><div class="sc-num">340</div><div class="sc-sub">↑ 18 this month</div></div>
+      <div class="stat-card"><div class="sc-label">Active mentees</div><div class="sc-num">24</div><div class="sc-sub">3 new requests</div></div>
+      <div class="stat-card"><div class="sc-label">Avg. rating</div><div class="sc-num">4.9★</div><div class="sc-sub">87 reviews</div></div>
+      <div class="stat-card"><div class="sc-label">Resources uploaded</div><div class="sc-num">12</div><div class="sc-sub">10 approved</div></div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+      <button class="tab-btn" data-tab="upload" onclick="switchTab('upload',this)">Upload resource</button>
+      <button class="tab-btn" onclick="switchTab('mentees',this)">My mentees</button>
+      <button class="tab-btn" onclick="switchTab('reviews',this)">Reviews</button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="tab-pane active" id="tab-overview">
+      <div class="grid-32">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Today's sessions</div><span class="card-link" onclick="alert('Full calendar coming soon!')">View calendar</span></div>
+          <div class="session-row">
+            <div class="sess-avatar" style="background:#2d6a4f">PR</div>
+            <div><div class="sess-name">Priya Ramesh</div><div class="sess-meta">Business pricing strategy</div></div>
+            <div class="sess-time">3:00 PM</div>
+            <span class="sess-badge sb-now">In 2 hrs</span>
+            <button class="btn-join" onclick="alert('Joining video call...\n\nIn the full app, this opens the video call link.')">Join</button>
+          </div>
+          <div class="session-row">
+            <div class="sess-avatar" style="background:#e76f51">AK</div>
+            <div><div class="sess-name">Arjun Kulkarni</div><div class="sess-meta">Food business pricing</div></div>
+            <div class="sess-time">5:30 PM</div>
+            <span class="sess-badge sb-upcoming">Upcoming</span>
+            <button class="btn-join" onclick="alert('Session starts at 5:30 PM. Link will be available 10 mins before.')">Prep</button>
+          </div>
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--paper);">
+            <div class="card-title" style="margin-bottom:14px;">Upcoming this week</div>
+            <div class="session-row">
+              <div class="sess-avatar" style="background:#264653">SM</div>
+              <div><div class="sess-name">Suresh M.</div><div class="sess-meta">Client acquisition strategy</div></div>
+              <div class="sess-time">May 15 · 4 PM</div>
+              <span class="sess-badge sb-upcoming">Thu</span>
+            </div>
+            <div class="session-row">
+              <div class="sess-avatar" style="background:#8e44ad">DN</div>
+              <div><div class="sess-name">Deepa Nair</div><div class="sess-meta">Online selling — Etsy setup</div></div>
+              <div class="sess-time">May 16 · 2 PM</div>
+              <span class="sess-badge sb-upcoming">Fri</span>
+            </div>
+            <div class="session-row">
+              <div class="sess-avatar" style="background:#1d7a8c">VP</div>
+              <div><div class="sess-name">Vikram Patel</div><div class="sess-meta">Scaling to multiple locations</div></div>
+              <div class="sess-time">May 17 · 11 AM</div>
+              <span class="sess-badge sb-done">Sat</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">New requests</div></div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:34px;height:34px;border-radius:50%;background:#6a4c93;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:11px;color:white;">RS</div>
+                <div><div style="font-size:14px;font-weight:500;">Rekha Sharma</div><div style="font-size:12px;color:var(--muted);">Tailoring · Mumbai</div></div>
+              </div>
+              <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">"I want guidance on pricing for bridal lehengas and how to get clients from Instagram."</div>
+              <div style="display:flex;gap:8px;">
+                <button style="flex:1;background:var(--accent);color:white;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Request accepted! Rekha will be notified.')">Accept</button>
+                <button style="padding:8px 16px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Request declined.')">Decline</button>
+              </div>
+            </div>
+            <div style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:34px;height:34px;border-radius:50%;background:#c0392b;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:11px;color:white;">KM</div>
+                <div><div style="font-size:14px;font-weight:500;">Kavitha M.</div><div style="font-size:12px;color:var(--muted);">Embroidery · Hyderabad</div></div>
+              </div>
+              <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">"Need help setting up an online store and understanding GST for my embroidery business."</div>
+              <div style="display:flex;gap:8px;">
+                <button style="flex:1;background:var(--accent);color:white;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Request accepted!')">Accept</button>
+                <button style="padding:8px 16px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Request declined.')">Decline</button>
+              </div>
+            </div>
+            <div style="border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:14px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <div style="width:34px;height:34px;border-radius:50%;background:#2c7873;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:11px;color:white;">LB</div>
+                <div><div style="font-size:14px;font-weight:500;">Lakshmi Bai</div><div style="font-size:12px;color:var(--muted);">Tailoring · Bengaluru</div></div>
+              </div>
+              <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">"I've been tailoring for 5 years but struggle with getting repeat customers. Please help!"</div>
+              <div style="display:flex;gap:8px;">
+                <button style="flex:1;background:var(--accent);color:white;border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Request accepted!')">Accept</button>
+                <button style="padding:8px 16px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Request declined.')">Decline</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">My uploaded resources</div><span class="card-link" onclick="switchTab('upload',document.querySelector('[data-tab=upload]'))">Upload new</span></div>
+        <div class="resource-row"><div class="res-icon ri-vid">📹</div><div style="flex:1"><div class="res-title">How to price your tailoring services</div><div class="res-meta">Video · 22 min · 1,240 views</div></div><span class="res-status rs-approved">✓ Approved</span></div>
+        <div class="resource-row"><div class="res-icon ri-art">📄</div><div style="flex:1"><div class="res-title">Instagram marketing for fashion entrepreneurs</div><div class="res-meta">Article · 9 min read · 834 views</div></div><span class="res-status rs-approved">✓ Approved</span></div>
+        <div class="resource-row"><div class="res-icon ri-chk">☑️</div><div style="flex:1"><div class="res-title">Tailoring business launch checklist</div><div class="res-meta">Checklist · 4 min · 2,108 downloads</div></div><span class="res-status rs-approved">✓ Approved</span></div>
+        <div class="resource-row"><div class="res-icon ri-vid">📹</div><div style="flex:1"><div class="res-title">Client retention: keeping customers coming back</div><div class="res-meta">Video · 18 min · Submitted today</div></div><span class="res-status rs-pending">⏳ Pending review</span></div>
+        <div class="resource-row"><div class="res-icon ri-art">📄</div><div style="flex:1"><div class="res-title">Pricing guide: bridal and special occasion wear</div><div class="res-meta">Article · 12 min read · Submitted yesterday</div></div><span class="res-status rs-pending">⏳ Pending review</span></div>
+      </div>
+    </div>
+
+    <!-- UPLOAD -->
+    <div class="tab-pane" id="tab-upload">
+      <div style="max-width:620px;">
+        <div class="upload-box" onclick="alert('File picker would open here. Supports MP4, PDF, DOCX up to 500MB.')">
+          <div class="upload-icon">📁</div>
+          <div class="upload-text">Drop your file here or click to browse</div>
+          <div class="upload-sub">Supports MP4 (video), PDF, DOCX, images. Max 500MB.</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Resource title</label>
+            <input class="form-input" type="text" placeholder="e.g. GST Registration Step-by-Step">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Resource type</label>
+            <select class="form-select">
+              <option>Video</option>
+              <option>Article</option>
+              <option>Checklist</option>
+              <option>Template / worksheet</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select">
+              <option>Legal & registration</option>
+              <option>Finance & pricing</option>
+              <option>Marketing</option>
+              <option>Operations</option>
+              <option>Sales & clients</option>
+              <option>Technology</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Linked roadmap step</label>
+            <select class="form-select">
+              <option>Not linked</option>
+              <option>Step 4 — Choose business structure</option>
+              <option>Step 5 — Register business name</option>
+              <option>Step 6 — GST registration</option>
+              <option>Step 8 — MSME registration</option>
+              <option>Step 11 — Build pricing structure</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description</label>
+          <textarea class="form-textarea" placeholder="Briefly describe what learners will gain from this resource…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tags (comma separated)</label>
+          <input class="form-input" type="text" placeholder="e.g. GST, legal, registration, small business">
+        </div>
+        <button class="btn-upload" onclick="alert('Resource submitted for admin review!\n\nYou\'ll be notified within 24–48 hours once it\'s approved and goes live for learners.')">Submit for review →</button>
+      </div>
+    </div>
+
+    <!-- MENTEES -->
+    <div class="tab-pane" id="tab-mentees">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#2d6a4f;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">PR</div>
+            <div><div style="font-size:15px;font-weight:600;">Priya Ramesh</div><div style="font-size:12px;color:var(--muted);">Tailoring - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">64%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:64%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Priya Ramesh...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Priya Ramesh...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#e76f51;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">AK</div>
+            <div><div style="font-size:15px;font-weight:600;">Arjun Kulkarni</div><div style="font-size:12px;color:var(--muted);">Food delivery - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">38%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:38%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Arjun Kulkarni...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Arjun Kulkarni...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#264653;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">SM</div>
+            <div><div style="font-size:15px;font-weight:600;">Suresh M.</div><div style="font-size:12px;color:var(--muted);">Phone repair - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">22%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:22%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Suresh M...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Suresh M...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#8e44ad;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">DN</div>
+            <div><div style="font-size:15px;font-weight:600;">Deepa Nair</div><div style="font-size:12px;color:var(--muted);">Handicrafts - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">81%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:81%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Deepa Nair...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Deepa Nair...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#1d7a8c;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">VP</div>
+            <div><div style="font-size:15px;font-weight:600;">Vikram Patel</div><div style="font-size:12px;color:var(--muted);">Electronics repair - Active</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">55%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:55%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Vikram Patel...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Vikram Patel...')">Session</button>
+          </div>
+        </div>
+        <div style="background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:#6a4c93;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:white;">RS</div>
+            <div><div style="font-size:15px;font-weight:600;">Rekha Sharma</div><div style="font-size:12px;color:var(--muted);">Tailoring - New</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;"><span>Roadmap progress</span><span style="color:var(--accent);font-weight:600;">5%</span></div>
+          <div style="height:5px;background:var(--paper);border-radius:3px;overflow:hidden;margin-bottom:16px;"><div style="width:5%;height:100%;background:var(--accent-light);border-radius:3px;"></div></div>
+          <div style="display:flex;gap:8px;">
+            <button style="flex:1;background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:8px;font-size:12px;font-weight:500;cursor:pointer;" onclick="alert('Opening chat with Rekha Sharma...')">Message</button>
+            <button style="padding:8px 14px;border:1.5px solid var(--border);border-radius:50px;background:transparent;font-size:12px;cursor:pointer;" onclick="alert('Booking session with Rekha Sharma...')">Session</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="tab-pane" id="tab-reviews">
+      <div class="rating-summary">
+        <div class="rating-big"><div class="rating-num">4.9</div><div class="rating-stars">★★★★★</div><div class="rating-count">87 reviews</div></div>
+        <div class="rating-bars">
+          <div class="rb-row"><span class="rb-label">5</span><div class="rb-track"><div class="rb-fill" style="width:87%"></div></div><span class="rb-count">76</span></div>
+          <div class="rb-row"><span class="rb-label">4</span><div class="rb-track"><div class="rb-fill" style="width:9%"></div></div><span class="rb-count">8</span></div>
+          <div class="rb-row"><span class="rb-label">3</span><div class="rb-track"><div class="rb-fill" style="width:2%"></div></div><span class="rb-count">2</span></div>
+          <div class="rb-row"><span class="rb-label">2</span><div class="rb-track"><div class="rb-fill" style="width:1%"></div></div><span class="rb-count">1</span></div>
+          <div class="rb-row"><span class="rb-label">1</span><div class="rb-track"><div class="rb-fill" style="width:0%"></div></div><span class="rb-count">0</span></div>
+        </div>
+      </div>
+      <div class="review-item">
+        <div class="rv-top"><div class="rv-avatar" style="background:#2d6a4f">PR</div><div style="flex:1"><div class="rv-name">Priya Ramesh</div></div><div class="rv-time">2 days ago</div></div>
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-text">Meera is an exceptional mentor. Her practical advice on pricing transformed my business - I raised my rates by 30% and still got more clients. She explains things in the simplest way possible.</div>
+      </div>
+      <div class="review-item">
+        <div class="rv-top"><div class="rv-avatar" style="background:#8e44ad">DN</div><div style="flex:1"><div class="rv-name">Deepa Nair</div></div><div class="rv-time">1 week ago</div></div>
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-text">I had been struggling with Instagram for months. After one session with Meera I finally understood what I was doing wrong. My profile went from 200 to 1,200 followers in 3 weeks!</div>
+      </div>
+      <div class="review-item">
+        <div class="rv-top"><div class="rv-avatar" style="background:#c0392b">KM</div><div style="flex:1"><div class="rv-name">Kavitha M.</div></div><div class="rv-time">2 weeks ago</div></div>
+        <div class="rv-stars">★★★★☆</div>
+        <div class="rv-text">Very knowledgeable about the tailoring business. I wish the session was a bit longer - we ran out of time before covering everything. But the advice I did get was gold.</div>
+      </div>
+      <div class="review-item">
+        <div class="rv-top"><div class="rv-avatar" style="background:#e76f51">AK</div><div style="flex:1"><div class="rv-name">Arjun K.</div></div><div class="rv-time">3 weeks ago</div></div>
+        <div class="rv-stars">★★★★★</div>
+        <div class="rv-text">Even though Arjun is in food, not fashion, Meera helped me understand the universal principles of client pricing and retention. Her framework applies to any service business.</div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+const firstName = savedName.trim().split(' ')[0] || 'Entrepreneur';
+const initials = savedName
+  .trim()
+  .split(' ')
+  .filter(Boolean)
+  .slice(0, 2)
+  .map(part => part[0].toUpperCase())
+  .join('') || 'EN';
+
+const dashboardUserName = document.getElementById('dashboardUserName');
+if (dashboardUserName) dashboardUserName.textContent = firstName;
+document.getElementById('sidebarUserName').textContent = savedName;
+document.getElementById('userAvatar').textContent = initials;
+</script>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — EntreSkill Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--sidebar:220px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;--radius-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;min-height:100vh;font-size:15px;}
+.sidebar{width:var(--sidebar);background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo a{font-family:var(--font-display);font-weight:800;font-size:17px;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#52b788;}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.5);font-size:14px;text-decoration:none;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(82,183,136,0.18);color:#52b788;}
+.nav-icon{font-size:17px;width:20px;text-align:center;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
+.user-role{font-size:11px;color:rgba(255,255,255,0.35);}
+.main{margin-left:var(--sidebar);flex:1;}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.notif-btn{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;position:relative;color:var(--ink);text-decoration:none;}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--warm);border:2px solid var(--card);}
+.btn-sm{background:var(--accent);color:white;border:none;border-radius:50px;padding:9px 20px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;}
+.btn-sm:hover{background:var(--ink);}
+.content{padding:36px;}
+.greeting{margin-bottom:32px;}
+.greeting h1{font-family:var(--font-display);font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+.greeting p{color:var(--muted);font-size:15px;}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;}
+.stat-card.highlight{background:var(--accent);border-color:var(--accent);}
+.stat-card.highlight .sc-label,.stat-card.highlight .sc-change{color:rgba(255,255,255,0.65);}
+.stat-card.highlight .sc-num{color:white;}
+.sc-label{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0.3px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.sc-num{font-family:var(--font-display);font-size:32px;font-weight:800;letter-spacing:-1.5px;margin-bottom:8px;}
+.sc-change{font-size:12px;color:var(--accent-light);}
+.sc-change.warn{color:var(--warm);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:24px;}
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;}
+.card-title{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-0.3px;}
+.card-link{font-size:13px;color:var(--accent);text-decoration:none;font-weight:500;}
+.card-link:hover{text-decoration:underline;}
+.roadmap-item{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--paper);}
+.roadmap-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.rm-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.rm-name{font-size:14px;font-weight:500;cursor:pointer;}
+.rm-name:hover{color:var(--accent);}
+.rm-tag{font-size:11px;padding:3px 10px;border-radius:50px;font-weight:500;}
+.tag-active{background:var(--accent-pale);color:var(--accent);}
+.tag-pending{background:var(--warm-pale);color:var(--warm);}
+.tag-done{background:#e8f4f8;color:#1a6a8a;}
+.progress-track{height:6px;background:var(--paper);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;}
+.fill-green{background:var(--accent-light);}
+.fill-warm{background:var(--warm);}
+.fill-blue{background:#378add;}
+.rm-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:5px;}
+.activity-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--paper);}
+.activity-item:last-child{border-bottom:none;}
+.activity-dot{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.ad-green{background:var(--accent-pale);}
+.ad-warm{background:var(--warm-pale);}
+.ad-blue{background:#e6f1fb;}
+.activity-text{font-size:13px;line-height:1.5;}
+.activity-text strong{font-weight:500;}
+.activity-time{font-size:11px;color:var(--muted);margin-top:3px;}
+.mentor-card-sm{display:flex;align-items:center;gap:14px;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);transition:border-color .15s;cursor:pointer;margin-bottom:10px;}
+.mentor-card-sm:last-child{margin-bottom:0;}
+.mentor-card-sm:hover{border-color:var(--accent-light);}
+.m-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:13px;color:white;flex-shrink:0;}
+.m-name{font-size:14px;font-weight:500;}
+.m-exp{font-size:12px;color:var(--muted);}
+.m-rating{margin-left:auto;font-size:12px;color:var(--warm);}
+.btn-book{background:var(--accent-pale);color:var(--accent);border:none;border-radius:50px;padding:6px 14px;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .15s;margin-left:8px;}
+.btn-book:hover{background:var(--accent);color:white;}
+.idea-item{display:flex;align-items:center;gap:14px;padding:12px;background:var(--paper);border-radius:var(--radius-sm);cursor:pointer;transition:background .15s;margin-bottom:8px;}
+.idea-item:last-child{margin-bottom:0;}
+.idea-item:hover{background:var(--accent-pale);}
+.idea-icon{width:38px;height:38px;border-radius:8px;background:var(--card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.idea-name{font-size:14px;font-weight:500;}
+.idea-match{font-size:12px;color:var(--accent);}
+.idea-arrow{margin-left:auto;color:var(--muted);}
+.session-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--paper);}
+.session-item:last-child{border-bottom:none;}
+.session-date{width:44px;text-align:center;background:var(--accent-pale);border-radius:8px;padding:6px;flex-shrink:0;}
+.sd-day{font-family:var(--font-display);font-size:18px;font-weight:800;color:var(--accent);line-height:1;}
+.sd-mon{font-size:10px;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+.session-title{font-size:14px;font-weight:500;margin-bottom:3px;}
+.session-meta{font-size:12px;color:var(--muted);}
+.session-badge{font-size:11px;padding:3px 10px;border-radius:50px;background:var(--warm-pale);color:var(--warm);font-weight:500;align-self:center;white-space:nowrap;}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.bar{width:100%;background:var(--accent-pale);border-radius:4px 4px 0 0;cursor:pointer;}
+.bar:hover{background:var(--accent-light);}
+.bar-lbl{font-size:10px;color:var(--muted);}
+@media(max-width:900px){.sidebar{width:60px;}.sidebar-logo a span:not(.logo-dot){display:none;}.nav-item span:not(.nav-icon){display:none;}.nav-section,.user-name,.user-role{display:none;}.main{margin-left:60px;}.stats-row{grid-template-columns:1fr 1fr;}.grid-2,.grid-3{grid-template-columns:1fr;}}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr;}.content{padding:20px;}.topbar{padding:14px 20px;}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item active" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+    <a class="nav-item" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
+    <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
+    <a class="nav-item" href="Mentor.html"><span class="nav-icon">👥</span><span>Mentors</span></a>  
+    <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress Report</span></a>
+    <a class="nav-item" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
+    <a class="nav-item" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
+    <div class="nav-section">Account</div>
+   <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item" href="Admin.html"><span class="nav-icon">🛡️</span><span>Admin Panel</span></a>
+    <a class="nav-item" href="Qa-forum.html"><span class="nav-icon">💬</span><span>Q&A Community</span></a>
+    <a class="nav-item" href="notification.html"><span class="nav-icon">🔔</span><span>Notifications</span></a>
+    <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+  </nav>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="userAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">Dashboard</div>
+    <div class="topbar-right">
+      <a class="notif-btn" href="notification.html" aria-label="Notifications">🔔<div class="notif-dot"></div></a>
+      <a class="btn-sm" href="roadmap.html">Continue roadmap →</a>
+    </div>
+  </div>
+  <div class="content">
+    <div class="greeting"><h1>Good morning, <span id="dashboardUserName">Entrepreneur</span> 👋</h1><p>You're 64% through your tailoring business roadmap. Keep going — 5 steps left!</p></div>
+    <div class="stats-row">
+      <div class="stat-card highlight"><div class="sc-label">Roadmap progress</div><div class="sc-num">64%</div><div class="sc-change">↑ 12% this week</div></div>
+      <div class="stat-card"><div class="sc-label">Resources completed</div><div class="sc-num">18</div><div class="sc-change">of 47 total</div></div>
+      <div class="stat-card"><div class="sc-label">Mentor sessions</div><div class="sc-num">4</div><div class="sc-change">Next: May 14</div></div>
+      <div class="stat-card"><div class="sc-label">Day streak 🔥</div><div class="sc-num">23</div><div class="sc-change warn">5-day streak!</div></div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header"><div class="card-title">My roadmaps</div><a class="card-link" href="roadmap.html">View all</a></div>
+        <div class="roadmap-item"><div class="rm-row"><div class="rm-name" onclick="window.location='roadmap.html'">✂️ Custom tailoring studio</div><span class="rm-tag tag-active">Active</span></div><div class="progress-track"><div class="progress-fill fill-green" style="width:64%"></div></div><div class="rm-meta"><span>8 of 14 steps done</span><span>64%</span></div></div>
+        <div class="roadmap-item"><div class="rm-row"><div class="rm-name" onclick="window.location='roadmap.html'">📱 Social media services</div><span class="rm-tag tag-pending">Saved</span></div><div class="progress-track"><div class="progress-fill fill-warm" style="width:10%"></div></div><div class="rm-meta"><span>1 of 12 steps done</span><span>10%</span></div></div>
+        <div class="roadmap-item"><div class="rm-row"><div class="rm-name" onclick="window.location='roadmap.html'">🎨 Freelance graphic design</div><span class="rm-tag tag-done">Completed</span></div><div class="progress-track"><div class="progress-fill fill-blue" style="width:100%"></div></div><div class="rm-meta"><span>All 10 steps done</span><span>100%</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Weekly activity</div></div>
+        <div class="chart-bars" id="chartBars"></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:12px;display:flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;border-radius:2px;background:var(--accent-light);display:inline-block;"></span>Steps completed per day</div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Upcoming sessions</div><a class="card-link" href="Mentor.html">Book more</a></div>
+        <div class="session-item"><div class="session-date"><div class="sd-day">14</div><div class="sd-mon">May</div></div><div style="flex:1"><div class="session-title">Business pricing strategy</div><div class="session-meta">with Meera Iyer · 3:00 PM IST · 45 min</div></div><div class="session-badge">Tomorrow</div></div>
+        <div class="session-item"><div class="session-date"><div class="sd-day">18</div><div class="sd-mon">May</div></div><div style="flex:1"><div class="session-title">Instagram marketing for tailors</div><div class="session-meta">with Raj Kumar · 5:00 PM IST · 30 min</div></div><div class="session-badge" style="background:var(--accent-pale);color:var(--accent)">In 4 days</div></div>
+        <div class="session-item"><div class="session-date"><div class="sd-day">22</div><div class="sd-mon">May</div></div><div style="flex:1"><div class="session-title">Legal registration Q&A</div><div class="session-meta">with Anita Singh · 11:00 AM IST · 60 min</div></div><div class="session-badge" style="background:var(--accent-pale);color:var(--accent)">In 8 days</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recent activity</div></div>
+        <div class="activity-item"><div class="activity-dot ad-green">✅</div><div><div class="activity-text"><strong>Completed step:</strong> Business name registration</div><div class="activity-time">2 hours ago</div></div></div>
+        <div class="activity-item"><div class="activity-dot ad-blue">📹</div><div><div class="activity-text"><strong>Watched:</strong> How to price your tailoring services</div><div class="activity-time">Yesterday · 22 min</div></div></div>
+        <div class="activity-item"><div class="activity-dot ad-warm">🤝</div><div><div class="activity-text"><strong>Session completed</strong> with Meera Iyer</div><div class="activity-time">3 days ago</div></div></div>
+        <div class="activity-item"><div class="activity-dot ad-green">📖</div><div><div class="activity-text"><strong>Read:</strong> GST registration guide</div><div class="activity-time">4 days ago</div></div></div>
+        <div class="activity-item"><div class="activity-dot ad-blue">⭐</div><div><div class="activity-text"><strong>Bookmarked:</strong> Mobile repair roadmap</div><div class="activity-time">5 days ago</div></div></div>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><div class="card-title">Recommended mentors</div><a class="card-link" href="Mentor.html">Browse all</a></div>
+        <div class="mentor-card-sm" onclick="window.location='Mentor.html'"><div class="m-avatar" style="background:#2d6a4f">MI</div><div><div class="m-name">Meera Iyer</div><div class="m-exp">Fashion & tailoring · 12 yrs</div></div><div class="m-rating">⭐ 4.9</div><button class="btn-book">Book</button></div>
+        <div class="mentor-card-sm" onclick="window.location='Mentor.html'"><div class="m-avatar" style="background:#e76f51">RK</div><div><div class="m-name">Raj Kumar</div><div class="m-exp">Digital marketing · 8 yrs</div></div><div class="m-rating">⭐ 4.7</div><button class="btn-book">Book</button></div>
+        <div class="mentor-card-sm" onclick="window.location='Mentor.html'"><div class="m-avatar" style="background:#264653">AS</div><div><div class="m-name">Anita Singh</div><div class="m-exp">Legal & business · 15 yrs</div></div><div class="m-rating">⭐ 4.8</div><button class="btn-book">Book</button></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">Saved business ideas</div></div>
+        <div class="idea-item" onclick="window.location='roadmap.html'"><div class="idea-icon">✂️</div><div><div class="idea-name">Custom tailoring studio</div><div class="idea-match">95% match · Active</div></div><div class="idea-arrow">→</div></div>
+        <div class="idea-item" onclick="window.location='roadmap.html'"><div class="idea-icon">📱</div><div><div class="idea-name">Social media manager</div><div class="idea-match">88% match</div></div><div class="idea-arrow">→</div></div>
+        <div class="idea-item" onclick="window.location='roadmap.html'"><div class="idea-icon">🍱</div><div><div class="idea-name">Home tiffin service</div><div class="idea-match">74% match</div></div><div class="idea-arrow">→</div></div>
+        <div class="idea-item" onclick="window.location='learning.html'"><div class="idea-icon">📚</div><div><div class="idea-name">Continue learning</div><div class="idea-match">18 resources pending</div></div><div class="idea-arrow">→</div></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],vals=[2,1,3,2,4,1,3],max=Math.max(...vals);
+document.getElementById('chartBars').innerHTML=days.map((d,i)=>`<div class="bar-col"><div class="bar" style="height:${Math.round(vals[i]/max*70)}px" title="${vals[i]} steps on ${d}"></div><span class="bar-lbl">${d}</span></div>`).join('');
+
+const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+const firstName = savedName.trim().split(' ')[0] || 'Entrepreneur';
+const initials = savedName
+  .trim()
+  .split(' ')
+  .filter(Boolean)
+  .slice(0, 2)
+  .map(part => part[0].toUpperCase())
+  .join('') || 'EN';
+
+document.getElementById('dashboardUserName').textContent = firstName;
+document.getElementById('sidebarUserName').textContent = savedName;
+document.getElementById('userAvatar').textContent = initials;
+</script>
+</body>
+</html>

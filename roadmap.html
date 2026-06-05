@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Roadmap — EntreSkill Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--sidebar:220px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;--radius-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar);background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo a{font-family:var(--font-display);font-weight:800;font-size:17px;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#52b788;}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.5);font-size:14px;text-decoration:none;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(82,183,136,0.18);color:#52b788;}
+.nav-icon{font-size:17px;width:20px;text-align:center;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
+.user-role{font-size:11px;color:rgba(255,255,255,0.35);}
+.main{margin-left:var(--sidebar);flex:1;}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.btn-sm{background:var(--accent);color:white;border:none;border-radius:50px;padding:9px 20px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;text-decoration:none;}
+.btn-sm:hover{background:var(--ink);}
+.content{padding:36px;max-width:960px;}
+
+/* Roadmap selector */
+.rm-selector{display:flex;gap:12px;margin-bottom:32px;flex-wrap:wrap;}
+.rm-pill{padding:10px 20px;border-radius:50px;border:1.5px solid var(--border);background:var(--card);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;}
+.rm-pill:hover{border-color:var(--accent);}
+.rm-pill.active{background:var(--ink);color:white;border-color:var(--ink);}
+
+/* Roadmap header card */
+.rm-header{background:var(--ink);border-radius:var(--radius);padding:36px;margin-bottom:32px;position:relative;overflow:hidden;}
+.rm-header::before{content:'';position:absolute;right:-40px;top:-40px;width:250px;height:250px;border-radius:50%;background:rgba(82,183,136,0.12);}
+.rm-h-label{font-size:12px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:12px;}
+.rm-h-title{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-1px;color:white;margin-bottom:6px;}
+.rm-h-sub{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:28px;}
+.rm-h-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.rm-hs{color:rgba(255,255,255,0.9);}
+.rm-hs-num{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-1px;}
+.rm-hs-label{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px;}
+.rm-h-progress{margin-top:24px;}
+.rm-h-bar{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;margin-top:8px;}
+.rm-h-fill{height:100%;background:var(--accent-light);border-radius:3px;transition:width 1s ease;}
+.rm-h-pct{font-size:13px;color:rgba(255,255,255,0.6);margin-top:6px;}
+
+/* Steps */
+.steps-section{display:grid;grid-template-columns:1fr 340px;gap:28px;}
+.phase-label{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:24px 0 12px;padding-left:4px;}
+.phase-label:first-child{margin-top:0;}
+.step-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:10px;display:flex;gap:18px;cursor:pointer;transition:all .15s;position:relative;}
+.step-card:hover{border-color:var(--accent-light);transform:translateX(4px);}
+.step-card.done{background:#f6fbf7;border-color:#c3e6cb;}
+.step-card.current{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.08);}
+.step-card.locked{opacity:0.5;cursor:not-allowed;}
+.step-card.locked:hover{transform:none;border-color:var(--border);}
+.step-num-wrap{display:flex;flex-direction:column;align-items:center;gap:0;}
+.step-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;font-family:var(--font-display);}
+.circle-done{background:var(--accent);color:white;}
+.circle-current{background:var(--ink);color:white;}
+.circle-locked{background:var(--paper);color:var(--muted);border:1.5px solid var(--border);}
+.step-connector{width:2px;flex:1;background:var(--border);margin:4px auto;min-height:16px;}
+.step-connector.done{background:var(--accent-light);}
+.step-body{flex:1;}
+.step-title{font-size:15px;font-weight:600;margin-bottom:4px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
+.step-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.step-tag{font-size:11px;padding:3px 10px;border-radius:50px;background:var(--paper);color:var(--muted);border:1px solid var(--border);}
+.step-tag.type-legal{background:#e6f1fb;color:#185fa5;border-color:#b3d1f5;}
+.step-tag.type-finance{background:var(--warm-pale);color:var(--warm);border-color:#f5c0b0;}
+.step-tag.type-marketing{background:#f3e6fb;color:#6a1a8a;border-color:#d9b3f5;}
+.step-tag.type-ops{background:var(--accent-pale);color:var(--accent);border-color:#a8dfc0;}
+.step-status{font-size:11px;font-weight:600;margin-top:8px;}
+.status-done{color:var(--accent);}
+.status-current{color:var(--warm);}
+
+/* Sidebar panel */
+.rm-sidebar{width: 300px;
+    padding: 20px;
+    background: var(--card);}
+.rm-s-card{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px;}
+.rms-title{font-family:var(--font-display);font-size:15px;font-weight:700;letter-spacing:-0.3px;margin-bottom:16px;}
+.tip-item{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--paper);}
+.tip-item:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.tip-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:var(--accent-pale);}
+.tip-text{font-size:13px;color:var(--muted);line-height:1.5;}
+.tip-text strong{color:var(--ink);display:block;margin-bottom:2px;}
+.milestone-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--paper);}
+.milestone-item:last-child{border-bottom:none;}
+.ms-icon{font-size:18px;}
+.ms-name{font-size:13px;font-weight:500;}
+.ms-status{margin-left:auto;font-size:12px;}
+.ms-done{color:var(--accent);}
+.ms-pending{color:var(--muted);}
+.btn-step{width:100%;background:var(--accent);color:white;border:none;border-radius:50px;padding:13px;font-family:var(--font-body);font-size:14px;font-weight:500;cursor:pointer;transition:all .15s;margin-top:4px;}
+.btn-step:hover{background:var(--ink);}
+
+@media(max-width:1100px){.steps-section{grid-template-columns:1fr;}}
+@media(max-width:900px){.sidebar{width:60px;}.sidebar-logo a span:not(.logo-dot){display:none;}.nav-item span:not(.nav-icon){display:none;}.nav-section,.user-name,.user-role{display:none;}.main{margin-left:60px;}}
+@media(max-width:600px){.content{padding:20px;}.topbar{padding:14px 20px;}.rm-h-stats{gap:16px;}.rm-selector{gap:8px;}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="frontpage.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>Dashboard</span></a>
+    <a class="nav-item active" href="roadmap.html"><span class="nav-icon">🗺️</span><span>My Roadmap</span></a>
+    <a class="nav-item" href="learning.html"><span class="nav-icon">📚</span><span>Learning</span></a>
+    <a class="nav-item" href="Mentor.html"><span class="nav-icon">👥</span><span>Mentors</span></a>
+    <a class="nav-item" href="legal-guide.html"><span class="nav-icon">⚖️</span><span>Legal Guide</span></a>
+    <a class="nav-item" href="scheme-finder.html"><span class="nav-icon">🏛️</span><span>Govt. Schemes</span></a>
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span><span>Profile</span></a>
+    <a class="nav-item" href="progress-report.html"><span class="nav-icon">📊</span><span>Progress</span></a>
+    <a class="nav-item" href="admin.html"><span class="nav-icon">🛡️</span><span>Admin</span></a>
+    <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+  </nav>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar" id="sidebarAvatar">EN</div><div><div class="user-name" id="sidebarUserName">Entrepreneur</div><div class="user-role">Entrepreneur</div></div></div></div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">My Roadmap</div>
+    <div style="display:flex;gap:10px;">
+      <a class="btn-sm" href="learning.html" style="background:var(--paper);color:var(--ink);border:1.5px solid var(--border);">View resources</a>
+      <a class="btn-sm" href="Mentor.html">Book a mentor</a>
+    </div>
+  </div>
+  <div class="content">
+    <div class="rm-selector">
+      <div class="rm-pill active" onclick="selectRM(this,'tailoring')">✂️ Custom tailoring studio</div>
+      <div class="rm-pill" onclick="selectRM(this,'social')">📱 Social media services</div>
+      <div class="rm-pill" onclick="selectRM(this,'design')">🎨 Freelance design</div>
+    </div>
+
+    <div class="rm-header" id="rmHeader">
+      <div class="rm-h-label">Active roadmap</div>
+      <div class="rm-h-title" id="rmTitle">Custom tailoring studio</div>
+      <div class="rm-h-sub" id="rmSub">From home-based skill to a registered tailoring business with regular clients.</div>
+      <div class="rm-h-stats">
+        <div class="rm-hs"><div class="rm-hs-num" id="rmDone">8</div><div class="rm-hs-label">Steps done</div></div>
+        <div class="rm-hs"><div class="rm-hs-num" id="rmTotal">14</div><div class="rm-hs-label">Total steps</div></div>
+        <div class="rm-hs"><div class="rm-hs-num" id="rmWeeks">3</div><div class="rm-hs-label">Weeks left (est.)</div></div>
+        <div class="rm-hs"><div class="rm-hs-num" id="rmMentors">3</div><div class="rm-hs-label">Mentors matched</div></div>
+      </div>
+      <div class="rm-h-progress">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:6px;"><span>Overall progress</span><span id="rmPct">64%</span></div>
+        <div class="rm-h-bar"><div class="rm-h-fill" id="rmFill" style="width:64%"></div></div>
+      </div>
+    </div>
+
+    <div class="steps-section">
+      <div id="stepsList"></div>
+      <div class="rm-sidebar">
+        <div class="rm-s-card">
+          <div class="rms-title">📍 Current focus</div>
+          <div class="tip-item"><div class="tip-icon">📝</div><div class="tip-text"><strong>Step 9: MSME Registration</strong>Register on the Udyam portal to get MSME status — this unlocks loans, subsidies, and government contracts.</div></div>
+          <button class="btn-step" onclick="alert('Opening MSME registration guide...\n\nIn the full app, this would open a detailed tutorial with step-by-step instructions and form guidance.')">Start this step →</button>
+        </div>
+        <div class="rm-s-card">
+          <div class="rms-title">🏆 Milestones</div>
+          <div class="milestone-item"><span class="ms-icon">🎯</span><span class="ms-name">Business name registered</span><span class="ms-status ms-done">✓ Done</span></div>
+          <div class="milestone-item"><span class="ms-icon">📱</span><span class="ms-name">Instagram page created</span><span class="ms-status ms-done">✓ Done</span></div>
+          <div class="milestone-item"><span class="ms-icon">💰</span><span class="ms-name">First client acquired</span><span class="ms-status ms-done">✓ Done</span></div>
+          <div class="milestone-item"><span class="ms-icon">📋</span><span class="ms-name">MSME registration</span><span class="ms-status ms-pending">In progress</span></div>
+          <div class="milestone-item"><span class="ms-icon">🏦</span><span class="ms-name">Business bank account</span><span class="ms-status ms-pending">Upcoming</span></div>
+          <div class="milestone-item"><span class="ms-icon">🌐</span><span class="ms-name">Online store launched</span><span class="ms-status ms-pending">Upcoming</span></div>
+        </div>
+        <div class="rm-s-card">
+          <div class="rms-title">💡 Quick tips</div>
+          <div class="tip-item"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Keep it moving</strong>Completing 1 step per day means you'll launch in under 3 weeks!</div></div>
+          <div class="tip-item"><div class="tip-icon">👥</div><div class="tip-text"><strong>Ask your mentor</strong>Meera Iyer has guided 50+ tailors through MSME registration.</div></div>
+          <div class="tip-item"><div class="tip-icon">📚</div><div class="tip-text"><strong>Resources waiting</strong>You have 3 videos linked to your current step in the Learning section.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<script>
+const roadmaps={
+  tailoring:{title:'Custom tailoring studio',sub:'From home-based skill to a registered tailoring business with regular clients.',done:8,total:14,weeks:3,mentors:3,pct:64,phases:[
+    {label:'Phase 1 — Validate & plan',steps:[
+      {n:1,title:'Identify your niche & target market',desc:'Define what type of tailoring you specialise in — bridal, kids, alterations, or custom clothing. Research your local demand.',tags:['ops'],status:'done'},
+      {n:2,title:'Competitive analysis',desc:'Visit or research 5 competitors. Note their pricing, turnaround time, and what clients complain about online.',tags:['ops'],status:'done'},
+      {n:3,title:'Create a basic business plan',desc:'Write a 1-page plan covering your target client, pricing, and how many orders you need per month to be profitable.',tags:['finance'],status:'done'},
+    ]},
+    {label:'Phase 2 — Legal & registration',steps:[
+      {n:4,title:'Choose your business structure',desc:'Decide between Sole Proprietorship (simplest) or OPC. For most home tailors, sole proprietorship is the best start.',tags:['legal'],status:'done'},
+      {n:5,title:'Register your business name',desc:'Register with your local municipal corporation or online via the Shops and Establishments Act. Cost: ₹200–₹1,000.',tags:['legal'],status:'done'},
+      {n:6,title:'Get a GST number (optional at start)',desc:'Required only if your annual turnover exceeds ₹20 lakh. You can register voluntarily to look more professional.',tags:['legal'],status:'done'},
+      {n:7,title:'Open a business bank account',desc:'Separate your personal and business finances from day one. Requires business registration documents.',tags:['finance'],status:'done'},
+      {n:8,title:'MSME / Udyam registration',desc:'Register on the Udyam portal (udyamregistration.gov.in) to get official MSME status and access to government schemes.',tags:['legal'],status:'current'},
+    ]},
+    {label:'Phase 3 — Setup & marketing',steps:[
+      {n:9,title:'Set up your workspace',desc:'Organise your tailoring area for efficiency. Buy or rent any missing equipment. Create a simple pricing chart to display.',tags:['ops'],status:'locked'},
+      {n:10,title:'Create an Instagram business page',desc:'Post 9 photos of your work before launching. Use local hashtags like #ChennaiTailor. Set up a WhatsApp Business account.',tags:['marketing'],status:'locked'},
+      {n:11,title:'Build your pricing structure',desc:'Calculate cost per order: materials + time + overhead + 25% profit margin. Create tiered packages (basic/standard/premium).',tags:['finance'],status:'locked'},
+      {n:12,title:'Get your first 5 clients',desc:'Offer a 10% discount to friends and family in exchange for referrals and honest reviews. Photograph every piece you make.',tags:['marketing'],status:'locked'},
+    ]},
+    {label:'Phase 4 — Launch & grow',steps:[
+      {n:13,title:'Launch your online presence',desc:'List on Justdial, Google Business, and local Facebook groups. Ask your first clients to leave Google Reviews.',tags:['marketing'],status:'locked'},
+      {n:14,title:'Scale to 20+ clients per month',desc:'Hire a helper, systemise your order intake (WhatsApp form), and set a monthly revenue target of ₹25,000.',tags:['ops','finance'],status:'locked'},
+    ]},
+  ]},
+  social:{title:'Social media management',sub:'Build a freelance career managing Instagram, Facebook and content for small businesses.',done:1,total:12,weeks:8,mentors:2,pct:8,phases:[
+    {label:'Phase 1 — Skill building',steps:[
+      {n:1,title:'Define your service offering',desc:'Decide which platforms and services you will offer — Instagram management, Reels creation, ad management, or full content strategy.',tags:['ops'],status:'done'},
+      {n:2,title:'Build your personal portfolio',desc:'Manage your own social channels for 30 days using best practices. Document your growth as your portfolio.',tags:['marketing'],status:'locked'},
+      {n:3,title:'Learn pricing for social media services',desc:'Research freelance rates — typically ₹5,000–₹20,000/month per client for full management in Indian market.',tags:['finance'],status:'locked'},
+    ]},
+    {label:'Phase 2 — Get clients',steps:[
+      {n:4,title:'Create a professional proposal template',desc:'Draft a client proposal with service packages, deliverables, timelines, and pricing.',tags:['ops'],status:'locked'},
+      {n:5,title:'Land your first 2 paid clients',desc:'Approach local restaurants, salons, and boutiques. Offer 1 month at 50% off in exchange for a testimonial.',tags:['marketing'],status:'locked'},
+    ]},
+  ]},
+  design:{title:'Freelance graphic design',sub:'Offer logo, social media, and print design to businesses and individuals.',done:10,total:10,weeks:0,mentors:1,pct:100,phases:[
+    {label:'Completed ✓',steps:[
+      {n:1,title:'All 10 steps completed!',desc:'Congratulations! You have successfully completed the Freelance Graphic Design roadmap. You are ready to grow.',tags:['ops'],status:'done'},
+    ]},
+  ]},
+};
+
+let completedSteps=new Set([1,2,3,4,5,6,7,8]);
+
+function selectRM(el,key){
+  document.querySelectorAll('.rm-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  renderRoadmap(key);
+}
+
+function renderRoadmap(key){
+  const rm=roadmaps[key];
+  document.getElementById('rmTitle').textContent=rm.title;
+  document.getElementById('rmSub').textContent=rm.sub;
+  document.getElementById('rmDone').textContent=rm.done;
+  document.getElementById('rmTotal').textContent=rm.total;
+  document.getElementById('rmWeeks').textContent=rm.weeks;
+  document.getElementById('rmMentors').textContent=rm.mentors;
+  document.getElementById('rmPct').textContent=rm.pct+'%';
+  document.getElementById('rmFill').style.width=rm.pct+'%';
+
+  const list=document.getElementById('stepsList');
+  list.innerHTML=rm.phases.map((phase,pi)=>`
+    <div class="phase-label">${phase.label}</div>
+    ${phase.steps.map((step,si)=>{
+      const isLast=si===phase.steps.length-1;
+      const cirClass=step.status==='done'?'circle-done':step.status==='current'?'circle-current':'circle-locked';
+      const icon=step.status==='done'?'✓':step.status==='current'?step.n:'🔒';
+      const connDone=step.status==='done'?'done':'';
+      return `<div class="step-card ${step.status}" onclick="stepClick(${step.n},'${step.status}')">
+        <div class="step-num-wrap">
+          <div class="step-circle ${cirClass}">${icon}</div>
+          ${!isLast?`<div class="step-connector ${connDone}"></div>`:''}
+        </div>
+        <div class="step-body">
+          <div class="step-title">${step.title}</div>
+          <div class="step-desc">${step.desc}</div>
+          <div class="step-tags">${step.tags.map(t=>`<span class="step-tag type-${t}">${t.charAt(0).toUpperCase()+t.slice(1)}</span>`).join('')}</div>
+          <div class="step-status ${step.status==='done'?'status-done':step.status==='current'?'status-current':''}">${step.status==='done'?'✓ Completed':step.status==='current'?'▶ In progress — click to continue':''}</div>
+        </div>
+      </div>`;
+    }).join('')}
+  `).join('');
+}
+
+function stepClick(n,status){
+  if(status==='locked'){alert('🔒 Complete the previous steps first to unlock this one!');return;}
+  if(status==='done'){alert(`✅ Step ${n} is already completed!\n\nYou can review the resources linked to this step in the Learning section.`);return;}
+  if(confirm(`Start Step ${n}?\n\nThis will open the detailed guide and linked learning resources for this step.`)){
+    alert('Opening step resources...\n\nIn the full app, this would show the full tutorial, linked videos, checklists, and the option to mark the step complete.');
+  }
+}
+
+function getUserInitials(name) {
+  return (name || 'Entrepreneur')
+    .trim()
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part[0].toUpperCase())
+    .join('') || 'EN';
+}
+
+function applyCurrentUser() {
+  const savedName = localStorage.getItem('entreSkillName') || 'Entrepreneur';
+  document.getElementById('sidebarUserName').textContent = savedName;
+  document.getElementById('sidebarAvatar').textContent = getUserInitials(savedName);
+}
+
+applyCurrentUser();
+renderRoadmap('tailoring');
+</script>
+</body>
+</html>

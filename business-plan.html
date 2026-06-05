@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Plan Generator — EntreSkill Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d0d0d;--paper:#f5f2eb;--cream:#fffdf7;--accent:#2d6a4f;--accent-light:#52b788;--accent-pale:#d8f3dc;--warm:#e76f51;--warm-pale:#fde8e0;--muted:#6b6b5f;--border:#e0ddd4;--card:#ffffff;--sidebar:220px;--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;--radius:16px;--radius-sm:8px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font-body);background:var(--paper);color:var(--ink);display:flex;min-height:100vh;}
+.sidebar{width:var(--sidebar);background:var(--ink);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:28px 24px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-logo a{font-family:var(--font-display);font-weight:800;font-size:17px;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
+.logo-dot{width:8px;height:8px;border-radius:50%;background:#52b788;}
+.sidebar-nav{flex:1;padding:20px 12px;display:flex;flex-direction:column;gap:4px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.5);font-family:var(--font-body);font-size:14px;font-weight:500;text-decoration:none;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.85);}
+.nav-item.active{background:rgba(231,111,81,0.2);color:#e76f51;font-weight:500;}
+.nav-icon{font-size:17px;width:20px;text-align:center;}
+.nav-section{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:16px 14px 6px;}
+.sidebar-user{padding:16px;border-top:1px solid rgba(255,255,255,0.08);}
+.user-pill{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:#e76f51;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:12px;color:white;flex-shrink:0;}
+.user-name{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;}
+.user-role{font-size:11px;color:rgba(255,255,255,0.35);}
+.main{margin-left:var(--sidebar);flex:1;}
+.topbar{background:var(--cream);border-bottom:1px solid var(--border);padding:18px 36px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;}
+.content{padding:36px;max-width:1100px;}
+
+/* LAYOUT */
+.bp-layout{display:grid;grid-template-columns:320px 1fr;gap:28px;align-items:start;}
+/* FORM PANEL */
+.form-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;position:sticky;top:90px;}
+.fp-title{font-family:var(--font-display);font-size:17px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px;}
+.fp-sub{font-size:13px;color:var(--muted);margin-bottom:24px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:13px;font-weight:500;margin-bottom:7px;display:block;}
+.form-input,.form-select,.form-textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--cream);font-family:var(--font-body);font-size:14px;color:var(--ink);outline:none;transition:border-color .2s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-textarea{resize:vertical;min-height:70px;}
+.btn-generate{width:100%;background:var(--ink);color:white;border:none;border-radius:50px;padding:14px;font-family:var(--font-body);font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:6px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-generate:hover{background:var(--accent);}
+.btn-generate.loading{opacity:0.7;cursor:not-allowed;}
+.progress-steps{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.ps-item{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+.ps-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.ps-done{background:var(--accent);color:white;}
+.ps-active{background:var(--ink);color:white;}
+.ps-idle{background:var(--paper);color:var(--muted);border:1.5px solid var(--border);}
+
+/* PLAN OUTPUT */
+.plan-panel{display:none;}
+.plan-panel.show{display:block;}
+.welcome-panel{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:48px;text-align:center;}
+.wp-icon{font-size:56px;margin-bottom:18px;}
+.wp-title{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-0.8px;margin-bottom:10px;}
+.wp-sub{font-size:15px;color:var(--muted);max-width:400px;margin:0 auto;}
+
+/* PLAN SECTIONS */
+.plan-header{background:var(--ink);border-radius:var(--radius);padding:36px;margin-bottom:20px;position:relative;overflow:hidden;}
+.plan-header::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(82,183,136,0.1);top:-100px;right:-80px;}
+.ph-badge{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent-light);margin-bottom:12px;}
+.ph-title{font-family:var(--font-display);font-size:28px;font-weight:800;letter-spacing:-1px;color:white;margin-bottom:6px;}
+.ph-sub{font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:24px;}
+.ph-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.ph-tag{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.75);font-size:12px;padding:4px 14px;border-radius:50px;}
+.plan-actions{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.btn-action{padding:10px 20px;border-radius:50px;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:1.5px solid var(--border);background:var(--card);}
+.btn-action:hover{background:var(--ink);color:white;border-color:var(--ink);}
+.btn-action.primary{background:var(--accent);color:white;border-color:var(--accent);}
+.btn-action.primary:hover{background:var(--ink);}
+.plan-section{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:28px;margin-bottom:16px;}
+.ps-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;}
+.ps-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.psi-green{background:var(--accent-pale);}
+.psi-warm{background:var(--warm-pale);}
+.psi-blue{background:#e6f1fb;}
+.psi-purple{background:#f3e6fb;}
+.psi-yellow{background:#faeeda;}
+.psi-dark{background:var(--paper);}
+.ps-label{font-family:var(--font-display);font-size:16px;font-weight:700;letter-spacing:-0.3px;flex:1;}
+.ps-toggle{font-size:18px;color:var(--muted);transition:transform .2s;}
+.ps-toggle.open{transform:rotate(180deg);}
+.ps-body{font-size:14px;line-height:1.8;color:var(--muted);}
+.ps-body.hidden{display:none;}
+.ps-body strong{color:var(--ink);font-weight:600;}
+.ps-body ul{margin:10px 0 10px 18px;}
+.ps-body li{margin-bottom:6px;}
+.ps-body .highlight{background:var(--accent-pale);border-left:3px solid var(--accent);padding:12px 16px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin:14px 0;font-size:14px;color:var(--ink);}
+/* FINANCIAL TABLE */
+.fin-table{width:100%;border-collapse:collapse;margin:14px 0;}
+.fin-table th{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--paper);}
+.fin-table td{padding:11px 14px;font-size:14px;border-bottom:1px solid rgba(224,221,212,0.5);}
+.fin-table tr:last-child td{border-bottom:none;font-weight:600;}
+.fin-table .total-row td{background:var(--accent-pale);color:var(--accent);}
+/* SWOT */
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.swot-card{border-radius:var(--radius-sm);padding:16px;}
+.swot-s{background:var(--accent-pale);border:1px solid #a8dfc0;}
+.swot-w{background:var(--warm-pale);border:1px solid #f5c0b0;}
+.swot-o{background:#e6f1fb;border:1px solid #b3d1f5;}
+.swot-t{background:#f3e6fb;border:1px solid #d9b3f5;}
+.swot-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.swot-s .swot-label{color:var(--accent);}
+.swot-w .swot-label{color:var(--warm);}
+.swot-o .swot-label{color:#185fa5;}
+.swot-t .swot-label{color:#6a1a8a;}
+.swot-item{font-size:13px;line-height:1.5;color:var(--ink);margin-bottom:5px;display:flex;gap:6px;}
+/* LOADING */
+.loading-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(13,13,13,0.5);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+.loading-overlay.show{display:flex;}
+.loading-box{background:var(--cream);border-radius:20px;padding:48px;text-align:center;max-width:360px;width:90%;}
+.loading-spinner{width:56px;height:56px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-title{font-family:var(--font-display);font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;}
+.loading-sub{font-size:14px;color:var(--muted);}
+.loading-steps{margin-top:20px;text-align:left;display:flex;flex-direction:column;gap:6px;}
+.ls-step{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.ls-step.done{color:var(--accent);}
+.ls-step.active{color:var(--ink);font-weight:500;}
+
+@media(max-width:1000px){.bp-layout{grid-template-columns:1fr;}.form-panel{position:static;}}
+@media(max-width:900px){.sidebar{width:60px;}.sidebar-logo a span:not(.logo-dot){display:none;}.nav-item span:not(.nav-icon){display:none;}.nav-section,.user-name,.user-role{display:none;}.main{margin-left:60px;}.swot-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){.content{padding:20px;}.topbar{padding:14px 20px;}.ph-title{font-size:22px;}.plan-actions{gap:8px;}}
+</style>
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-logo"><a href="entreskill-hub.html"><span class="logo-dot"></span><span>EntreSkill Hub</span></a></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">Main</div>
+    <a class="nav-item" href="Admin.html#overview"><span class="nav-icon">📊</span><span>Overview</span></a>
+    <a class="nav-item" href="business-ideas.html"><span class="nav-icon">💡</span><span>Business Ideas</span></a>
+    <a class="nav-item active" href="business-plan.html"><span class="nav-icon">📝</span><span>Business plans</span></a>
+    <a class="nav-item" href="cost-calculator.html"><span class="nav-icon">🧮</span><span>Cost Calculator</span></a>
+    <div class="nav-section">Account</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span><span>User view</span></a>
+    <a class="nav-item" href="entreskill-hub.html"><span class="nav-icon">🚪</span><span>Sign out</span></a>
+  </nav>
+  <div class="sidebar-user"><div class="user-pill"><div class="user-avatar">AD</div><div><div class="user-name">Admin User</div><div class="user-role">Super admin</div></div></div></div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title">Business Plan Generator</div>
+    <div style="font-size:13px;color:var(--muted);">Fill in your details → get a complete plan</div>
+  </div>
+  <div class="content">
+    <div class="bp-layout">
+
+      <!-- FORM PANEL -->
+      <div class="form-panel">
+        <div class="fp-title">📝 Your business details</div>
+        <div class="fp-sub">Fill in the form and we'll generate a complete business plan tailored to you.</div>
+        <div class="form-group">
+          <label class="form-label">Business name</label>
+          <input class="form-input" type="text" id="bName" placeholder="e.g. Priya's Tailoring Studio" value="Priya's Tailoring Studio">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business type</label>
+          <select class="form-select" id="bType">
+            <option value="tailoring" selected>Custom tailoring studio</option>
+            <option value="food">Home tiffin / food service</option>
+            <option value="beauty">Home beauty salon</option>
+            <option value="repair">Mobile / gadget repair</option>
+            <option value="design">Freelance graphic design</option>
+            <option value="tutoring">Online tutoring</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Your city</label>
+          <input class="form-input" type="text" id="bCity" placeholder="e.g. Chennai, Tamil Nadu" value="Chennai, Tamil Nadu">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Starting capital (₹)</label>
+          <select class="form-select" id="bCapital">
+            <option>Under ₹10,000</option>
+            <option>₹10,000 – ₹25,000</option>
+            <option selected>₹25,000 – ₹50,000</option>
+            <option>₹50,000 – ₹1,00,000</option>
+            <option>Above ₹1,00,000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target monthly income goal (₹)</label>
+          <select class="form-select" id="bIncome">
+            <option>₹10,000 – ₹20,000</option>
+            <option>₹20,000 – ₹40,000</option>
+            <option selected>₹40,000 – ₹75,000</option>
+            <option>₹75,000 – ₹1,50,000</option>
+            <option>Above ₹1,50,000</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Years of experience</label>
+          <select class="form-select" id="bExp">
+            <option>Less than 1 year</option>
+            <option>1–3 years</option>
+            <option>3–5 years</option>
+            <option selected>5–10 years</option>
+            <option>10+ years</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target clients (optional)</label>
+          <textarea class="form-textarea" id="bClients" placeholder="e.g. Working women, brides, college students in my area…">Working women and brides in Chennai who need custom stitching and alterations.</textarea>
+        </div>
+        <button class="btn-generate" id="genBtn" onclick="generatePlan()">
+          <span>✨</span> Generate my business plan
+        </button>
+      </div>
+
+      <!-- OUTPUT PANEL -->
+      <div id="outputPanel">
+        <div class="welcome-panel" id="welcomePanel">
+          <div class="wp-icon">📋</div>
+          <div class="wp-title">Your business plan will appear here</div>
+          <div class="wp-sub">Fill in your details on the left and click "Generate" — your personalised plan will be ready in seconds.</div>
+        </div>
+        <div class="plan-panel" id="planPanel"></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-box">
+    <div class="loading-spinner"></div>
+    <div class="loading-title">Building your plan…</div>
+    <div class="loading-sub">Personalising your business plan based on your inputs.</div>
+    <div class="loading-steps" id="loadingSteps">
+      <div class="ls-step" id="ls1">⏳ Analysing your business type…</div>
+      <div class="ls-step" id="ls2">⏳ Building financial projections…</div>
+      <div class="ls-step" id="ls3">⏳ Creating marketing strategy…</div>
+      <div class="ls-step" id="ls4">⏳ Generating SWOT analysis…</div>
+      <div class="ls-step" id="ls5">⏳ Finalising your plan…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const plans = {
+  tailoring: {
+    tagline: "Home-based custom tailoring and alterations business",
+    tags: ["Fashion & apparel","Service business","Home-based","Low investment"],
+    executive: `<strong>Priya's Tailoring Studio</strong> is a home-based custom tailoring and alteration service targeting working women and bridal clients in Chennai. With 10+ years of tailoring experience and an initial investment of ₹25,000–₹50,000, the business aims to reach <strong>₹40,000–₹75,000 monthly revenue</strong> within 6 months of launch.<br><br>The business will operate from a dedicated home workspace and serve clients via WhatsApp bookings and Instagram, gradually building a loyal local customer base through quality work and referrals.`,
+    market: `<strong>Target market:</strong> Working women (25–50 years), brides and their families, college students in Chennai and surrounding areas who value custom fit and personalised stitching over off-the-rack clothing.<br><br><strong>Market size:</strong> Chennai has 11 million+ residents with a growing middle class that increasingly values customised fashion. The wedding industry alone generates ₹1,800 crore annually in Tamil Nadu.<br><br><ul><li>Primary clients: Women needing custom kurtas, salwars, and blouses (₹300–₹1,500 per piece)</li><li>Secondary clients: Brides and wedding parties (₹5,000–₹50,000+ per order)</li><li>Tertiary: Alteration and repair clients (₹150–₹800 per piece, recurring)</li></ul><div class="highlight">💡 Key insight: 73% of tailoring customers are repeat clients. Focusing on quality and reliability builds a self-sustaining business through referrals within 3–6 months.</div>`,
+    operations: `<strong>Workspace:</strong> Dedicated home tailoring room (minimum 100 sq ft) with proper lighting, ventilation, and storage.<br><br><strong>Equipment needed:</strong><ul><li>Primary sewing machine: ₹8,000–₹15,000 (if not already owned)</li><li>Overlock / serger machine: ₹6,000–₹12,000</li><li>Iron & ironing board, measuring tools, dress form: ₹3,000–₹5,000</li><li>Fabric scissors, needles, threads, accessories: ₹2,000–₹3,000</li></ul><strong>Order management:</strong> WhatsApp Business for bookings and measurements. Simple notebook or Google Sheets for order tracking. Aim for 2–3 day turnaround for standard orders, 7–14 days for bridal.<br><br><strong>Working hours:</strong> 8–10 hours/day to handle 3–5 standard orders or 1–2 complex orders daily.`,
+    marketing: `<strong>Phase 1 — Launch (Month 1–2):</strong><ul><li>Create WhatsApp Business account with a professional catalogue of your work</li><li>Set up Instagram Business page with 9–12 high-quality before/after photos</li><li>Offer 10–15% launch discount to first 20 clients in exchange for referrals and reviews</li><li>List on JustDial, Sulekha, and Google Business Profile (free)</li></ul><strong>Phase 2 — Growth (Month 3–6):</strong><ul><li>Post 4–5 Instagram Reels/week showing your work process</li><li>Start a "Referral reward" programme — ₹200 off for every successful referral</li><li>Partner with local boutiques and bridal stores for alteration overflow work</li></ul><div class="highlight">🎯 Goal: 30 regular clients by Month 3, 60+ by Month 6. One loyal client who refers 2 friends who each refer 2 more = 7 clients from one relationship.</div>`,
+    financial: {
+      startup: [
+        ["Sewing & overlock machines","₹18,000"],
+        ["Ironing & finishing equipment","₹4,000"],
+        ["Initial fabric & accessories stock","₹5,000"],
+        ["Workspace setup (lighting, storage)","₹3,000"],
+        ["Business registration (GST optional)","₹1,500"],
+        ["Instagram setup & initial photoshoot","₹2,000"],
+        ["Working capital buffer","₹5,000"],
+        ["Total","₹38,500"],
+      ],
+      monthly: [
+        ["Raw materials (thread, accessories, zips)","₹3,000–₹5,000"],
+        ["WhatsApp Business API (optional)","₹500"],
+        ["Electricity & utilities","₹800–₹1,200"],
+        ["Marketing & Instagram ads","₹1,000–₹2,000"],
+        ["Miscellaneous","₹500"],
+        ["Total monthly expenses","₹5,800–₹8,700"],
+      ],
+      revenue: [
+        ["20 standard orders/month @ ₹800 avg","₹16,000"],
+        ["10 alteration orders/month @ ₹400 avg","₹4,000"],
+        ["2 bridal/special orders/month @ ₹8,000 avg","₹16,000"],
+        ["Total monthly revenue (Month 3+)","₹36,000"],
+        ["Less: expenses","–₹7,000"],
+        ["Net monthly profit","₹29,000"],
+      ]
+    },
+    swot: {
+      s:["10+ years tailoring experience — strong craft skill","Home-based = zero rent, low overhead","High quality, personalised service vs mass-market alternatives","Strong word-of-mouth potential in local community"],
+      w:["Limited initial client base","No existing online presence or portfolio yet","Single operator = capacity constraints","No brand recognition initially"],
+      o:["Growing demand for custom fit in Chennai's fashion market","Bridal season (Oct–Feb) creates high-value demand spikes","Online platforms (Instagram, WhatsApp) enable zero-cost marketing","MSME status unlocks government subsidies and low-interest loans"],
+      t:["Large tailoring shops with more staff and faster turnaround","Ready-to-wear fashion reducing demand for custom stitching","Rising cost of quality fabric and accessories","Difficulty finding reliable material suppliers initially"]
+    },
+    timeline: [
+      {m:"Month 1",tasks:["Register business name","Set up Instagram + WhatsApp Business","Photograph 12+ work samples","Get first 5 paying clients via friends/family"]},
+      {m:"Month 2",tasks:["Complete MSME/Udyam registration","Open business bank account","List on JustDial, Google Business","Target 15 orders/month"]},
+      {m:"Month 3",tasks:["Launch referral programme","Start posting Reels 3×/week","Partner with 1–2 local boutiques","Target 25 orders/month, ₹20,000 revenue"]},
+      {m:"Month 4–5",tasks:["Scale to 35+ orders/month","Consider hiring a helper for simple tasks","Explore bridal season bookings","Target ₹35,000 monthly revenue"]},
+      {m:"Month 6",tasks:["Evaluate: expand workspace or hire?","Register for GST if turnover approaching ₹20L","Set 12-month growth targets","Consider online selling via Meesho/Instagram Shop"]},
+    ]
+  }
+};
+
+// Generic plan for non-tailoring types
+const genericPlan = (name, type, city, capital, income) => ({
+  tagline: `Home-based ${type} business in ${city}`,
+  tags: ["Service business","Home-based","Micro-enterprise","Beginner-friendly"],
+  executive: `<strong>${name}</strong> is a home-based ${type} service targeting local clients in ${city}. With an initial investment of <strong>${capital}</strong>, the business aims to reach <strong>${income} monthly revenue</strong> within 4–6 months of launch through quality service and consistent marketing.`,
+  market: `<strong>Target market:</strong> Local residents and small businesses in ${city} who need reliable, quality ${type} services at competitive prices.<br><br><ul><li>Primary clients: Regular local customers seeking convenience and quality</li><li>Secondary clients: Referrals and repeat business from satisfied customers</li><li>Tertiary: Corporate or bulk clients in the area</li></ul><div class="highlight">💡 Start with 10 loyal clients who each refer 2 people — this builds a sustainable 30-client base within 3 months.</div>`,
+  operations: `<strong>Workspace:</strong> Home-based setup to keep overheads minimal in the early months.<br><br><strong>Equipment needed:</strong> Based on your specific service type — refer to your roadmap for the detailed equipment list and sourcing guide.<br><br><strong>Order management:</strong> Use WhatsApp Business for bookings, Google Sheets for client records, and set clear turnaround time expectations from day one.`,
+  marketing: `<strong>Phase 1 — Launch (Month 1–2):</strong><ul><li>Create WhatsApp Business catalogue</li><li>Set up Instagram Business page with real photos of your work</li><li>Offer launch discounts to first clients for reviews</li><li>List on JustDial and Google Business (free)</li></ul><strong>Phase 2 — Growth (Month 3–6):</strong><ul><li>Post consistently on Instagram (4–5 times/week)</li><li>Launch a referral rewards programme</li><li>Partner with complementary local businesses</li></ul>`,
+  financial: {
+    startup:[["Equipment & tools","₹15,000–₹25,000"],["Setup & workspace","₹3,000–₹5,000"],["Registration & compliance","₹1,500–₹3,000"],["Marketing & branding","₹2,000–₹4,000"],["Working capital","₹5,000"],["Total (estimated)",capital]],
+    monthly:[["Materials & consumables","₹2,000–₹5,000"],["Marketing","₹1,000–₹2,000"],["Utilities","₹500–₹1,000"],["Miscellaneous","₹500"],["Total monthly expenses","₹4,000–₹8,500"]],
+    revenue:[["Service revenue (Month 1–2)","₹10,000–₹20,000"],["Service revenue (Month 3–4)","₹25,000–₹40,000"],["Target revenue (Month 5–6)",income],["Less: expenses","–₹6,500"],["Net profit estimate (Month 6+)","Target revenue minus monthly expenses"]]
+  },
+  swot:{
+    s:["Home-based keeps costs very low","Personalised service vs large competitors","Strong local community network","Growing experience with every client"],
+    w:["Limited capacity as solo operator","No existing client base or reviews","Initial low brand awareness","Learning curve on business operations"],
+    o:["Social media enables free, effective marketing","Growing demand for local, trustworthy services","MSME registration unlocks government schemes","Referral network can grow exponentially"],
+    t:["Established competitors with more resources","Pricing pressure from informal competition","Seasonal demand fluctuations","Difficulty maintaining quality while scaling"]
+  },
+  timeline:[
+    {m:"Month 1",tasks:["Register business","Set up social media","Get first 3–5 paying clients","Document all your work for portfolio"]},
+    {m:"Month 2",tasks:["Complete legal registrations","List on Google Business & JustDial","Target 10–15 clients/month","Gather testimonials and reviews"]},
+    {m:"Month 3",tasks:["Launch referral programme","Increase social media activity","Partner with complementary businesses","Target 25+ clients/month"]},
+    {m:"Month 4–6",tasks:["Scale operations","Consider hiring help","Evaluate growth opportunities","Set 12-month revenue targets"]},
+  ]
+});
+
+let planVisible = false;
+let openSections = new Set(['executive']);
+
+function generatePlan() {
+  const btn = document.getElementById('genBtn');
+  btn.classList.add('loading');
+  btn.innerHTML = '<span>⏳</span> Generating…';
+  document.getElementById('loadingOverlay').classList.add('show');
+
+  const steps = ['ls1','ls2','ls3','ls4','ls5'];
+  const labels = ['✅ Analysing your business type…','✅ Building financial projections…','✅ Creating marketing strategy…','✅ Generating SWOT analysis…','✅ Finalising your plan…'];
+  let i = 0;
+  const interval = setInterval(() => {
+    if(i < steps.length) {
+      document.getElementById(steps[i]).textContent = labels[i];
+      document.getElementById(steps[i]).classList.add('done');
+      i++;
+    } else {
+      clearInterval(interval);
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').classList.remove('show');
+        btn.classList.remove('loading');
+        btn.innerHTML = '<span>✨</span> Regenerate plan';
+        renderPlan();
+        // Reset loading steps
+        steps.forEach((s,idx) => {
+          const el = document.getElementById(s);
+          el.classList.remove('done');
+          el.textContent = ['⏳ Analysing your business type…','⏳ Building financial projections…','⏳ Creating marketing strategy…','⏳ Generating SWOT analysis…','⏳ Finalising your plan…'][idx];
+        });
+      }, 400);
+    }
+  }, 600);
+}
+
+function renderPlan() {
+  const name = document.getElementById('bName').value || 'My Business';
+  const type = document.getElementById('bType').value;
+  const city = document.getElementById('bCity').value || 'your city';
+  const capital = document.getElementById('bCapital').value;
+  const income = document.getElementById('bIncome').value;
+  const data = type === 'tailoring' ? plans.tailoring : genericPlan(name, type.replace(/-/g,' '), city, capital, income);
+
+  document.getElementById('welcomePanel').style.display = 'none';
+  const panel = document.getElementById('planPanel');
+  panel.classList.add('show');
+
+  const sections = [
+    {id:'executive', icon:'📋', iconClass:'psi-blue', label:'Executive Summary', content: data.executive},
+    {id:'market', icon:'🎯', iconClass:'psi-green', label:'Market Analysis', content: data.market},
+    {id:'operations', icon:'⚙️', iconClass:'psi-yellow', label:'Operations Plan', content: data.operations},
+    {id:'marketing', icon:'📣', iconClass:'psi-warm', label:'Marketing Strategy', content: data.marketing},
+    {id:'financial', icon:'💰', iconClass:'psi-purple', label:'Financial Plan', content: null, financial: data.financial},
+    {id:'swot', icon:'🔍', iconClass:'psi-dark', label:'SWOT Analysis', content: null, swot: data.swot},
+    {id:'timeline', icon:'📅', iconClass:'psi-green', label:'12-Month Timeline', content: null, timeline: data.timeline},
+  ];
+
+  panel.innerHTML = `
+    <div class="plan-header">
+      <div class="ph-badge">Your personalised business plan</div>
+      <div class="ph-title">${name}</div>
+      <div class="ph-sub">${data.tagline} · ${city}</div>
+      <div class="ph-tags">${data.tags.map(t=>`<span class="ph-tag">${t}</span>`).join('')}</div>
+    </div>
+    <div class="plan-actions">
+      <button class="btn-action primary" onclick="window.print()">🖨️ Print plan</button>
+      <button class="btn-action" onclick="alert('PDF export would download your complete business plan as a branded PDF document.')">⬇ Export PDF</button>
+      <button class="btn-action" onclick="alert('Shared! A view-only link has been copied to your clipboard.')">🔗 Share link</button>
+      <button class="btn-action" onclick="alert('Plan saved to your dashboard!')">💾 Save plan</button>
+    </div>
+    ${sections.map(s => `
+      <div class="plan-section" id="sec-${s.id}">
+        <div class="ps-header" onclick="toggleSection('${s.id}')">
+          <div class="ps-icon ${s.iconClass}">${s.icon}</div>
+          <div class="ps-label">${s.label}</div>
+          <div class="ps-toggle ${openSections.has(s.id)?'open':''}">▼</div>
+        </div>
+        <div class="ps-body ${openSections.has(s.id)?'':'hidden'}" id="body-${s.id}">
+          ${s.content ? s.content : ''}
+          ${s.financial ? renderFinancial(s.financial) : ''}
+          ${s.swot ? renderSwot(s.swot) : ''}
+          ${s.timeline ? renderTimeline(s.timeline) : ''}
+        </div>
+      </div>
+    `).join('')}
+  `;
+  panel.scrollIntoView({behavior:'smooth'});
+}
+
+function toggleSection(id) {
+  const body = document.getElementById('body-'+id);
+  const toggle = document.querySelector(`#sec-${id} .ps-toggle`);
+  if(openSections.has(id)) {
+    openSections.delete(id);
+    body.classList.add('hidden');
+    toggle.classList.remove('open');
+  } else {
+    openSections.add(id);
+    body.classList.remove('hidden');
+    toggle.classList.add('open');
+  }
+}
+
+function renderFinancial(f) {
+  const tbl = (title, rows) => `
+    <strong>${title}</strong>
+    <table class="fin-table">
+      <thead><tr><th>Item</th><th>Cost / Amount</th></tr></thead>
+      <tbody>${rows.map((r,i) => `<tr class="${i===rows.length-1?'total-row':''}"><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</tbody>
+    </table>`;
+  return tbl('Startup costs', f.startup) + '<br>' + tbl('Monthly expenses', f.monthly) + '<br>' + tbl('Revenue projection', f.revenue);
+}
+
+function renderSwot(s) {
+  const items = (arr) => arr.map(i=>`<div class="swot-item">• ${i}</div>`).join('');
+  return `<div class="swot-grid">
+    <div class="swot-card swot-s"><div class="swot-label">Strengths</div>${items(s.s)}</div>
+    <div class="swot-card swot-w"><div class="swot-label">Weaknesses</div>${items(s.w)}</div>
+    <div class="swot-card swot-o"><div class="swot-label">Opportunities</div>${items(s.o)}</div>
+    <div class="swot-card swot-t"><div class="swot-label">Threats</div>${items(s.t)}</div>
+  </div>`;
+}
+
+function renderTimeline(tl) {
+  return tl.map(t=>`
+    <div style="margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--paper);">
+      <div style="font-weight:600;font-size:14px;color:var(--accent);margin-bottom:8px;">${t.m}</div>
+      ${t.tasks.map(task=>`<div style="display:flex;gap:8px;font-size:13px;color:var(--muted);margin-bottom:5px;line-height:1.5;"><span>•</span><span>${task}</span></div>`).join('')}
+    </div>`).join('');
+}
+</script>
+</body>
+</html>
